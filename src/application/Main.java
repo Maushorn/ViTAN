@@ -33,6 +33,10 @@ public class Main extends Application {
 		
 			
 			Button btnNewAdventure = new Button("neues Adventure anlegen...");
+			btnNewAdventure.setOnAction(e -> {
+				EditDialog ed = new EditDialog();
+				ed.showAndWait();
+			});
 			Button btnEditAdventure = new Button("ausgewähltes Adventure bearbeiten...");
 			btnEditAdventure.setDisable(true);
 			Button btnStartTest = new Button("Test-Modus starten...");
