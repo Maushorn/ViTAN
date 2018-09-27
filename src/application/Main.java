@@ -25,16 +25,17 @@ public class Main extends Application {
 			Label lbl1 = new Label("Adventure auswählen");
 			ListView<String> adventureList = new ListView<>();
 			ObservableList<String> adventures = FXCollections.observableArrayList(
+					//TODO: Platzhalter entfernen
 					"Adventure1",
 					"Adventure2"
 					);
 			adventureList.setItems(adventures);
 			
-		
+			
 			
 			Button btnNewAdventure = new Button("neues Adventure anlegen...");
 			btnNewAdventure.setOnAction(e -> {
-				EditDialog ed = new EditDialog();
+				EditAdventureDialog ed = new EditAdventureDialog();
 				ed.showAndWait();
 			});
 			Button btnEditAdventure = new Button("ausgewähltes Adventure bearbeiten...");

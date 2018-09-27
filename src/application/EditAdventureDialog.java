@@ -3,9 +3,9 @@ package application;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 
-public class EditDialog extends Dialog<ButtonType> {
+public class EditAdventureDialog extends Dialog<ButtonType> {
 
-	public EditDialog() {
+	public EditAdventureDialog() {
 		this.setTitle("Adventure bearbeiten");
 		
 		this.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
