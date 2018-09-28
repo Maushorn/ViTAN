@@ -7,6 +7,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
+import textadventure.AdventureMap;
+import textadventure.Room;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,17 +27,19 @@ public class Main extends Application {
 			Label lbl1 = new Label("Adventure auswählen");
 			ListView<String> adventureList = new ListView<>();
 			ObservableList<String> adventures = FXCollections.observableArrayList(
-					//TODO: Platzhalter entfernen
+					//TODO: remove placeholders
 					"Adventure1",
 					"Adventure2"
 					);
 			adventureList.setItems(adventures);
 			
+			//TODO: placeholder AdventureMap
+			AdventureMap testMap = new AdventureMap();
 			
 			
 			Button btnNewAdventure = new Button("neues Adventure anlegen...");
 			btnNewAdventure.setOnAction(e -> {
-				EditAdventureDialog ed = new EditAdventureDialog();
+				EditAdventureDialog ed = new EditAdventureDialog(new AdventureMap());
 				ed.showAndWait();
 			});
 			Button btnEditAdventure = new Button("ausgewähltes Adventure bearbeiten...");

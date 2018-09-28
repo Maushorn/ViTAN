@@ -25,6 +25,21 @@ public class AdventureMap {
 		map.get(1).add(start);
 		map.get(1).add(new Room());
 	}
+	
+	public AdventureMap() {
+		this.start = new Room("Start");
+		map = new ArrayList<>();
+		map.add(new ArrayList<>());
+		map.add(new ArrayList<>());
+		map.add(new ArrayList<>());
+		for(int i = 0; i <= 2; ++i) {
+			map.get(0).add(new Room());
+			map.get(2).add(new Room());
+		}
+		map.get(1).add(new Room());
+		map.get(1).add(start);
+		map.get(1).add(new Room());
+	}
 
 	public void setRoomAt(int x, int y, Room room) {
 		map.get(x).set(y, room);
