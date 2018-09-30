@@ -44,7 +44,12 @@ public class Main extends Application {
 			});
 			Button btnEditAdventure = new Button("ausgewähltes Adventure bearbeiten...");
 			btnEditAdventure.setDisable(true);
+			
 			Button btnStartTest = new Button("Test-Modus starten...");
+			btnStartTest.setOnAction(e -> {
+				
+			});
+			
 			Button btnStartOnline = new Button("Online-Modus starten...");
 			
 			adventureList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {

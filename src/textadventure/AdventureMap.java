@@ -57,7 +57,7 @@ public class AdventureMap {
 					column.add(new Room());
 			}
 		}else if(x == map.size()-1) {
-			map.add(x, newColumn);
+			map.add(x+1, newColumn);
 			if(y == 0) {
 				for(ArrayList<Room> column : map)
 					column.add(0, new Room());

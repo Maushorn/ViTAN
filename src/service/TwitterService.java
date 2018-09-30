@@ -1,6 +1,7 @@
 package service;
 
 import twitter4j.DirectMessage;
+import twitter4j.DirectMessageList;
 import twitter4j.ResponseList;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -22,7 +23,7 @@ public class TwitterService {
 		ACCESS_TOKEN_SECRET = "bk6W4SHLhW6vdwrCQbw9EaCPFt2hnL0dCLhufafMe1MGB";
 	}
 
-	public static ResponseList<DirectMessage> getDirectMessages(){
+	public static DirectMessageList getDirectMessages(){
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
 		configBuilder.setOAuthConsumerSecret(CONSUMER_SECRET);
@@ -32,11 +33,10 @@ public class TwitterService {
 		Configuration config = configBuilder.build();
 		TwitterFactory twitterFactory = new TwitterFactory(config);
 		Twitter twitter = twitterFactory.getInstance();
-		ResponseList<DirectMessage> messageList = null;
+		DirectMessageList messageList = null;
 		try {
-			messageList = twitter.getDirectMessages();
+			messageList = twitter.getDirectMessages(50);
 		} catch (TwitterException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		return messageList;
