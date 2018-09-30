@@ -2,8 +2,11 @@ package textadventure;
 
 import java.util.ArrayList;
 
+import javafx.beans.property.SimpleStringProperty;
+
 public class AdventureMap {
 
+	private SimpleStringProperty name;
 	ArrayList<ArrayList<Room>> map;
 	Room start;
 	
@@ -11,7 +14,8 @@ public class AdventureMap {
 	 * 
 	 * @param start
 	 */
-	public AdventureMap(Room start) {
+	public AdventureMap(String name, Room start) {
+		this.name = new SimpleStringProperty(name);
 		this.start = start;
 		map = new ArrayList<>();
 		map.add(new ArrayList<>());
@@ -26,7 +30,8 @@ public class AdventureMap {
 		map.get(1).add(new Room());
 	}
 	
-	public AdventureMap() {
+	public AdventureMap(String name) {
+		this.name = new SimpleStringProperty(name);
 		this.start = new Room("Start");
 		map = new ArrayList<>();
 		map.add(new ArrayList<>());
@@ -39,6 +44,29 @@ public class AdventureMap {
 		map.get(1).add(new Room());
 		map.get(1).add(start);
 		map.get(1).add(new Room());
+	}
+
+	public AdventureMap(AdventureMap original) {
+		name = new SimpleStringProperty(original.getName());
+		map = new ArrayList<>();
+		for(int i = 0; i < original.getMap().size(); ++i) {
+			map.add(new ArrayList<>());
+			ArrayList<Room> originalColumn = original.getMap().get(i);
+			for(int j = 0; j < originalColumn.size(); ++j)
+				map.get(i).add(new Room(originalColumn.get(j)));
+		}
+	}
+
+	public SimpleStringProperty nameProperty() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name.set(name);
+	}
+	
+	public String getName() {
+		return name.get();
 	}
 
 	public void setRoomAt(int x, int y, Room room) {

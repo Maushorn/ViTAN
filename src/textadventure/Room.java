@@ -17,6 +17,17 @@ public class Room {
 //		this.yCoord = yCoord;
 	}
 	
+	public Room(Room original) {
+		super();
+		this.name = original.getName();
+		this.description = original.getDescription();
+		this.empty = original.isEmpty();
+	}
+	
+	public Boolean isEmpty() {
+		return empty;
+	}
+	
 	public int getXCoord() {
 		return xCoord;
 	}
@@ -55,10 +66,12 @@ public class Room {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	@Override
 	public String toString() {
-		return name;
+		return "Room [name=" + name + ", description=" + description + ", empty=" + empty + "]";
 	}
+	
+	
 
 }

@@ -1,8 +1,6 @@
 package service;
 
-import twitter4j.DirectMessage;
 import twitter4j.DirectMessageList;
-import twitter4j.ResponseList;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;

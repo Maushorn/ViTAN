@@ -1,9 +1,12 @@
 package application;
 
+import java.util.ArrayList;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -16,7 +19,7 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 	private static final int BUTTON_SPACING;
 	private static final int BUTTON_SIZE;
 	
-	private AdventureMap map;
+	private AdventureMap tempMap;
 	private HBox mapColumns;
 	
 	static {
@@ -24,33 +27,38 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 		BUTTON_SIZE = 100;
 	}
 	
-	public EditAdventureDialog(AdventureMap map) {
+	public EditAdventureDialog(AdventureMap map, ArrayList<AdventureMap> adventures) {
+		
 		VBox vBox = new VBox(BUTTON_SPACING);
-		this.map = map;
+		this.tempMap = map;
 		this.mapColumns = new HBox();
 		this.mapColumns.setPadding(new Insets(BUTTON_SPACING));
 		this.mapColumns.setSpacing(BUTTON_SPACING);
 		this.setTitle("Adventure bearbeiten");
 		updateButtons();
 		ScrollPane scrollPane = new ScrollPane(mapColumns);
+//		Button btnSave = new Button("Speichern");
+//		btnSave.setOnAction(e -> adventures.add(map));
 		
-		vBox.getChildren().add(scrollPane);
+		vBox.getChildren().addAll(scrollPane);
 		this.setResizable(true);
 		this.setWidth(500);
 		this.setHeight(500);
 		this.getDialogPane().setContent(vBox);
+		
 		this.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		
 	}
 	
 	private void updateButtons() {
 		mapColumns.getChildren().clear();
-		for(int i = 0; i < map.getMap().size(); ++i) {
+		for(int i = 0; i < tempMap.getMap().size(); ++i) {
 			int columnsIndex = i;
 			VBox column = new VBox();
 			column.setSpacing(10);
-			for(int j = 0; j < map.getMap().get(i).size(); ++j){
+			for(int j = 0; j < tempMap.getMap().get(i).size(); ++j){
 				int rowIndex = j;
-				Room room = map.getRoomAt(i, j);
+				Room room = tempMap.getRoomAt(i, j);
 				Button button = new Button(room.getName());
 				button.setPrefWidth(BUTTON_SIZE);
 				button.setPrefHeight(BUTTON_SIZE);
@@ -58,7 +66,7 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 					EditRoomDialog ed = new EditRoomDialog(room);
 					ed.showAndWait();
 					button.setText(room.getName());
-					map.setRoomAt(columnsIndex, rowIndex, room);
+					tempMap.setRoomAt(columnsIndex, rowIndex, room);
 					updateButtons();
 				});
 				if(!room.getName().equals("<leer>"))
