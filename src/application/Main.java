@@ -22,6 +22,7 @@ public class Main extends Application {
 	
 	private ArrayList<AdventureMap> adventures;
 	private AdventureMap selectedAdventure;
+	private ObservableList<String> adventureNameList;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -31,26 +32,45 @@ public class Main extends Application {
 			AdventureMap testMap = new AdventureMap("TestAdventure");
 			adventures = new ArrayList<>();
 			adventures.add(testMap);
+			testMap.setRoomAt(1, 1, new Room("neuer Raum"));
 			adventures.add(new AdventureMap("Test 2"));
+			ArrayList<String> adventureNames = new ArrayList<>();
+			for(AdventureMap am : adventures)
+				adventureNames.add(am.getName());
 			
 //			BorderPane root = new BorderPane();
 			VBox root = new VBox(10);
 			root.setPadding(new Insets(20));
 			Label lbl1 = new Label("Adventure auswählen");
 			ListView<String> adventureList = new ListView<>();
-			ObservableList<String> adventureNames = FXCollections.observableArrayList(testMap.getName());
-			adventureList.setItems(adventureNames);
+			adventureNameList = FXCollections.observableArrayList(adventureNames);
+			adventureList.setItems(adventureNameList);
 			
 			Button btnNewAdventure = new Button("neues Adventure anlegen...");
 			btnNewAdventure.setOnAction(e -> {
 				EditAdventureDialog ed = new EditAdventureDialog(new AdventureMap("Neues Adventure"), adventures);
 				ed.showAndWait();
+				adventureNames.clear();
+				for(AdventureMap am : adventures) {
+					
+					adventureNames.add(am.getName());
+				}
+				adventureNameList = FXCollections.observableArrayList(adventureNames);
+				adventureList.setItems(adventureNameList);
+				
 			});
 			Button btnEditAdventure = new Button("ausgewähltes Adventure bearbeiten...");
 			btnEditAdventure.setDisable(true);
 			btnEditAdventure.setOnAction(e -> {
 				EditAdventureDialog ed = new EditAdventureDialog(selectedAdventure, adventures);
 				ed.showAndWait();
+				adventureNames.clear();
+				for(AdventureMap am : adventures) {
+					
+					adventureNames.add(am.getName());
+				}
+				adventureNameList = FXCollections.observableArrayList(adventureNames);
+				adventureList.setItems(adventureNameList);
 			});
 			
 			Button btnStartTest = new Button("Test-Modus starten...");

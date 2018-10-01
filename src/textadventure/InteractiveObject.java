@@ -4,19 +4,28 @@ public class InteractiveObject {
 
 	private String name;
 	private String description;
-	private String unlockItem;
+	private String keyItem;
+	private String reward;
 	
 	public InteractiveObject(String name) {
 		super();
 		this.name = name;
 	}
 	
-	public String getUnlockItem() {
-		return unlockItem;
+	public String getReward() {
+		return reward;
 	}
 
-	public void setUnlockItem(String unlockItem) {
-		this.unlockItem = unlockItem;
+	public void setReward(String reward) {
+		this.reward = reward;
+	}
+	
+	public String getUnlockItem() {
+		return keyItem;
+	}
+
+	public void setUnlockItem(String keyItem) {
+		this.keyItem = keyItem;
 	}
 
 	public String getName() {

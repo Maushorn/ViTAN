@@ -2,12 +2,14 @@ package application;
 
 import java.util.ArrayList;
 
+import javafx.beans.value.ChangeListener;import javafx.collections.MapChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogEvent;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -30,23 +32,30 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 	public EditAdventureDialog(AdventureMap map, ArrayList<AdventureMap> adventures) {
 		
 		VBox vBox = new VBox(BUTTON_SPACING);
-		this.tempMap = map;
+		this.tempMap = new AdventureMap(map);
 		this.mapColumns = new HBox();
 		this.mapColumns.setPadding(new Insets(BUTTON_SPACING));
 		this.mapColumns.setSpacing(BUTTON_SPACING);
 		this.setTitle("Adventure bearbeiten");
+		TextField txtAdventureName = new TextField(map.getName());
 		updateButtons();
 		ScrollPane scrollPane = new ScrollPane(mapColumns);
-//		Button btnSave = new Button("Speichern");
-//		btnSave.setOnAction(e -> adventures.add(map));
+		Button btnSave = new Button("Speichern");
 		
-		vBox.getChildren().addAll(scrollPane);
+		btnSave.setOnAction(e -> {
+			tempMap.setName(txtAdventureName.getText());
+			adventures.remove(map);
+			adventures.add(tempMap);
+			});
+		Button btnEnd = new Button("Beenden");
+		
+		vBox.getChildren().addAll(txtAdventureName, scrollPane, btnSave);
 		this.setResizable(true);
 		this.setWidth(500);
 		this.setHeight(500);
 		this.getDialogPane().setContent(vBox);
 		
-		this.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		this.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
 		
 	}
 	
