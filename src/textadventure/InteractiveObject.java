@@ -10,6 +10,14 @@ public class InteractiveObject {
 		super();
 		this.name = name;
 	}
+	
+	public String getUnlockItem() {
+		return unlockItem;
+	}
+
+	public void setUnlockItem(String unlockItem) {
+		this.unlockItem = unlockItem;
+	}
 
 	public String getName() {
 		return name;
@@ -26,7 +34,5 @@ public class InteractiveObject {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
 	
 }
