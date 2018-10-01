@@ -1,9 +1,38 @@
 package textadventure;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Player {
-	Room location;
-//	ArrayList<Item> items;
+	
+	private Room location;
+	private HashSet<String> items;
+	
+	public Player() {
+		items = new HashSet<>();
+	}
+	
+	public HashSet<String> getItems() {
+		return items;
+	}
+	
+	public Room getLocation() {
+		return location;
+	}
+	
+	public void moveUp() {
+		
+	}
+	
+	public void moveRight() {
+		
+	}
+	
+	public void moveDown() {
+		
+	}
+
+	public void moveLeft() {
+	
+	}
 	
 }

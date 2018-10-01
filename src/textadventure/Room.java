@@ -1,10 +1,16 @@
 package textadventure;
 
+import java.util.ArrayList;
+
 public class Room {
 
 	private String name;
 	private String description;
 	private Boolean empty;
+	private ArrayList<Item> items;
+	private ArrayList<InteractiveObject> interactiveObjects;
+	
+	//TODO: Necessary?
 	private int xCoord;
 	private int yCoord;
 	
@@ -13,10 +19,17 @@ public class Room {
 		this.name = name;
 		this.description = "<leer>";
 		this.empty = false;
+		this.items = new ArrayList<>();
+		this.interactiveObjects = new ArrayList<>();
+		//TODO: Do I need these?
 //		this.xCoord = xCoord;
 //		this.yCoord = yCoord;
 	}
 	
+	/**Copy-Constructor
+	 * 
+	 * @param original
+	 */
 	public Room(Room original) {
 		super();
 		this.name = original.getName();
