@@ -7,8 +7,8 @@ import javafx.beans.property.SimpleStringProperty;
 public class AdventureMap {
 
 	private SimpleStringProperty name;
-	ArrayList<ArrayList<Room>> map;
-	Room start;
+	private ArrayList<ArrayList<Room>> map;
+	private Room start;
 	
 	/**Initializes a Map with 3 times 3 Rooms, where the start-room is in the middle.
 	 * 
@@ -103,10 +103,6 @@ public class AdventureMap {
 					column.add(new Room());
 			
 		}
-	}
-	
-	private void addColumnAt(int x) {
-		
 	}
 	
 	public Room getRoomAt(int x, int y) {
