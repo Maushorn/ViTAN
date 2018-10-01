@@ -7,7 +7,7 @@ public class Room {
 	private String name;
 	private String description;
 	private Boolean empty;
-	private ArrayList<Item> items;
+	private ArrayList<String> items;
 	private ArrayList<InteractiveObject> interactiveObjects;
 	
 	//TODO: Necessary?
@@ -26,21 +26,52 @@ public class Room {
 //		this.yCoord = yCoord;
 	}
 	
+	public Room() {
+		super();
+		this.name = "<leer>";
+		this.description = "<leer>";
+		this.empty = true;
+	}
+	
 	/**Copy-Constructor
 	 * 
 	 * @param original
 	 */
 	public Room(Room original) {
 		super();
-		this.name = original.getName();
-		this.description = original.getDescription();
-		this.empty = original.isEmpty();
+		name = original.getName();
+		description = original.getDescription();
+		empty = original.isEmpty();
+		items = new ArrayList<>();
+		if(!original.getItems().isEmpty())
+		for(String s : original.getItems())
+			items.add(s);
+		interactiveObjects = new ArrayList<>();
+		for(InteractiveObject iObj : original.getInteractiveObjects())
+			interactiveObjects.add(iObj);
 	}
+	
 	
 	public Boolean isEmpty() {
 		return empty;
 	}
 	
+	public void setEmpty(Boolean empty) {
+		this.empty = empty;
+	}
+
+	public ArrayList<String> getItems() {
+		return items;
+	}
+
+	public void setItems(ArrayList<String> items) {
+		this.items = items;
+	}
+
+	public ArrayList<InteractiveObject> getInteractiveObjects() {
+		return interactiveObjects;
+	}
+
 	public int getXCoord() {
 		return xCoord;
 	}
@@ -57,12 +88,7 @@ public class Room {
 		this.yCoord = yCoord;
 	}
 
-	public Room() {
-		super();
-		this.name = "<leer>";
-		this.description = "<leer>";
-		this.empty = true;
-	}
+	
 
 	public String getDescription() {
 		return description;

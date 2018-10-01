@@ -12,6 +12,14 @@ public class InteractiveObject {
 		this.name = name;
 	}
 	
+	public InteractiveObject(InteractiveObject original) {
+		super();
+		name = original.getName();
+		description = original.getDescription();
+		keyItem = original.getKeyItem();
+		reward = original.getReward();
+	}
+	
 	public String getReward() {
 		return reward;
 	}
@@ -20,11 +28,11 @@ public class InteractiveObject {
 		this.reward = reward;
 	}
 	
-	public String getUnlockItem() {
+	public String getKeyItem() {
 		return keyItem;
 	}
 
-	public void setUnlockItem(String keyItem) {
+	public void setKeyItem(String keyItem) {
 		this.keyItem = keyItem;
 	}
 
