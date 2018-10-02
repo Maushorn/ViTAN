@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import textadventure.Player;
+
 public class DatabaseService {
 
 	public static final String DBlocation = "C:\\Users\\janoc_000\\Desktop\\Projekt\\DB";
@@ -33,8 +35,18 @@ public class DatabaseService {
 		}	
 	}
 	
-	public static void save() {
+	public static void saveGame(Player player) {
 		
+	}
+	
+	public static Player loadGame(int UserID) {
+		//TODO: Implement!!!
+		return null;
+	}
+	
+	public static MetaInformation getMetaInformation() {
+		//TODO: Implement!!!
+		return null;
 	}
 	
 }

@@ -43,10 +43,11 @@ public class Room {
 		description = original.getDescription();
 		empty = original.isEmpty();
 		items = new ArrayList<>();
-		if(!original.getItems().isEmpty())
+		if(original.getItems() != null && !original.getItems().isEmpty())
 		for(String s : original.getItems())
 			items.add(s);
 		interactiveObjects = new ArrayList<>();
+		if(original.getInteractiveObjects() != null && !original.getInteractiveObjects().isEmpty())
 		for(InteractiveObject iObj : original.getInteractiveObjects())
 			interactiveObjects.add(iObj);
 	}
