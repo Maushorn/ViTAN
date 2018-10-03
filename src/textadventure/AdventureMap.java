@@ -10,6 +10,7 @@ public class AdventureMap {
 	private ArrayList<ArrayList<Room>> map;
 	private Room start;
 	
+	
 	/**Initializes a Map with 3 times 3 Rooms, where the start-room is in the middle.
 	 * 
 	 * @param start
@@ -17,6 +18,7 @@ public class AdventureMap {
 	public AdventureMap(String name, Room start) {
 		this.name = new SimpleStringProperty(name);
 		this.start = start;
+		this.start.setStartRoom(true);
 		map = new ArrayList<>();
 		map.add(new ArrayList<>());
 		map.add(new ArrayList<>());
@@ -32,7 +34,7 @@ public class AdventureMap {
 	
 	public AdventureMap(String name) {
 		this.name = new SimpleStringProperty(name);
-		this.start = new Room("Start");
+		this.start = new Room("Start", true);
 		map = new ArrayList<>();
 		map.add(new ArrayList<>());
 		map.add(new ArrayList<>());
@@ -105,8 +107,26 @@ public class AdventureMap {
 		}
 	}
 	
+	/**Get coordinates of specified room within the AdventureMap.
+	 * Returns null if no matching room is found.
+	 * 
+	 * @param room
+	 * @return
+	 */
+	public Coord getCoordinates(Room room) {
+		for(int i = 0; i < map.size(); ++i)
+			for(int j = 0; j < map.get(i).size(); ++j)
+				if(map.get(i).get(j) == room)
+					return new Coord(i, j);
+		return null;
+		
+	}
+	
+	//TODO: What if Room does not exist?
 	public Room getRoomAt(int x, int y) {
-		return map.get(x).get(y);
+		if((map.size() <= x) || (map.get(x).size() <= y))
+			return null;
+		else return map.get(x).get(y);
 	}
 	
 	public ArrayList<ArrayList<Room>> getMap() {
