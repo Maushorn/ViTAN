@@ -72,6 +72,8 @@ public class AdventureMap {
 	}
 
 	public void setRoomAt(int x, int y, Room room) {
+		if(this.getRoomAt(x, y).isStartRoom())
+			room.setStartRoom(true);
 		map.get(x).set(y, room);
 		ArrayList<Room> newColumn = new ArrayList<Room>();
 		for(int i = 0; i < map.get(0).size(); ++i)
