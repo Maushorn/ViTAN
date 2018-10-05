@@ -16,6 +16,7 @@ public class InputHandler {
 		String[] inputArray;
 		inputArray = input.split(" ");
 		String reactionMessage = "";
+		//move
 		if(
 				inputArray[0].equals("go") ||
 				inputArray[0].equals("move")
@@ -40,10 +41,23 @@ public class InputHandler {
 					inputArray[1].equals("west")
 					)
 				reactionMessage = player.moveLeft();
-		}
+		}//use
 		else if(inputArray[0].equals("use")) {
-			
-			reactionMessage = player.useItem(item, iObject)
+			if(
+					inputArray[2].equalsIgnoreCase("with") ||
+					inputArray[2].equalsIgnoreCase("and")
+					)
+			reactionMessage = player.useItem(player.getSpecificItem(inputArray[1]), player.getSpecificInteractiveObject(inputArray[3]));
+			else reactionMessage = player.useItem(player.getSpecificItem(inputArray[1]), player.getSpecificInteractiveObject(inputArray[3]));
+		}//inspect
+		else if(inputArray[0].equalsIgnoreCase("inspect")) {
+			for(Item i : player.getItems())
+				if (i.getName().equalsIgnoreCase(inputArray[1]))
+					reactionMessage = i.getDescription();
+			for(InteractiveObject iObj : player.getPosition().getInteractiveObjects())
+				if(iObj.getName().equalsIgnoreCase(inputArray[1]))
+					reactionMessage = iObj.getDescription();
+		
 		}
 		else reactionMessage = "no valid input";
 		//TODO Testing

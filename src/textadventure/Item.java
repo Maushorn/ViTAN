@@ -41,5 +41,12 @@ public class Item {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	@Override
+	public String toString() {
+		return "Item [name=" + name + ", description=" + description + "]";
+	}
+	
+	
 	
 }

@@ -57,8 +57,6 @@ public class Room {
 		empty = original.isEmpty();
 		items = new ArrayList<>();
 		if(original.getItems() != null && !original.getItems().isEmpty())
-		for(String s : original.getItems())
-			items.add(s);
 		interactiveObjects = new ArrayList<>();
 		if(original.getInteractiveObjects() != null && !original.getInteractiveObjects().isEmpty())
 		for(InteractiveObject iObj : original.getInteractiveObjects())
@@ -85,11 +83,11 @@ public class Room {
 		this.empty = empty;
 	}
 
-	public ArrayList<String> getItems() {
+	public ArrayList<Item> getItems() {
 		return items;
 	}
 
-	public void setItems(ArrayList<String> items) {
+	public void setItems(ArrayList<Item> items) {
 		this.items = items;
 	}
 

@@ -6,7 +6,7 @@ public class Player {
 	
 	private AdventureMap map;
 	private Room position;
-	private HashSet<String> items;
+	private HashSet<Item> items;
 		
 	public Player(AdventureMap map) {
 		this.map = map;
@@ -21,8 +21,22 @@ public class Player {
 		position = start;
 	}
 	
-	public HashSet<String> getItems() {
+	public HashSet<Item> getItems() {
 		return items;
+	}
+	
+	public Item getSpecificItem(String itemName) {
+		for(Item i : items)
+			if(i.getName().equalsIgnoreCase(itemName))
+				return i;
+		return null;
+	}
+	
+	public InteractiveObject getSpecificInteractiveObject(String objectName) {
+		for(InteractiveObject iObj : position.getInteractiveObjects())
+			if(iObj.getName().equalsIgnoreCase(objectName))
+				return iObj;
+		return null;
 	}
 	
 	public Room getPosition() {
@@ -76,8 +90,28 @@ public class Player {
 		else return ReactionMessage.ITEM_MISMATCH;
 	}
 	
+	public String getInventoryString() {
+		StringBuilder sb = new StringBuilder();
+		if(!items.isEmpty()){
+			sb.append("Items:");
+			for(Item i : items)
+				sb.append("\n" + i.getName());
+			return sb.toString();
+		}else return ReactionMessage.INVENTORY_EMPTY;
+	}
+	
 	public String inspect(Item item) {
 		return item.getDescription();
+	}
+	
+	public String takeSpecificItem(String itemName) {
+		for(Item i : position.getItems())
+			if(i.getName().equalsIgnoreCase(itemName)) {
+				items.add(i);
+				position.getItems().remove(i);
+				return ReactionMessage.SUCCESS;
+			}
+		return ReactionMessage.ITEM_MISSING;
 	}
 	
 	public String inspect(InteractiveObject iObject) {
