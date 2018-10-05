@@ -30,7 +30,7 @@ public class Player {
 	}
 	
 	//TODO: map.getRoom returns null if the move exceeds the defined map.
-	public int moveUp() {
+	public String moveUp() {
 		if((this.getCoord().getY() <= 0))
 			return ReactionMessage.INVALID_MOVE;
 		Room destination = map.getRoomAt(getCoord().getX(), getCoord().getY()-1);
@@ -40,7 +40,7 @@ public class Player {
 		}else return ReactionMessage.INVALID_MOVE;
 	}
 	
-	public int moveRight() {
+	public String moveRight() {
 		if((this.getCoord().getX() >= map.getMap().size()))
 			return ReactionMessage.INVALID_MOVE;
 		Room destination = map.getRoomAt(getCoord().getX()+1, getCoord().getY());
@@ -50,7 +50,7 @@ public class Player {
 			}else return ReactionMessage.INVALID_MOVE;
 	}
 	
-	public int moveDown() {
+	public String moveDown() {
 		if((this.getCoord().getY() >= map.getMap().get(0).size()))
 			return ReactionMessage.INVALID_MOVE;
 		Room destination = map.getRoomAt(getCoord().getX(), getCoord().getY()+1);
@@ -60,7 +60,7 @@ public class Player {
 			}else return ReactionMessage.INVALID_MOVE;
 	}
 
-	public int moveLeft() {
+	public String moveLeft() {
 		if(this.getCoord().getX() <= 0)
 			return ReactionMessage.INVALID_MOVE;
 		Room destination = map.getRoomAt(getCoord().getX()-1, getCoord().getY());
@@ -70,8 +70,18 @@ public class Player {
 			}else return ReactionMessage.INVALID_MOVE;
 	}
 	
-	public Boolean useItem(Item item, InteractiveObject iObject) {
-		return item.getName().equals(iObject.getKeyItem());
+	public String useItem(Item item, InteractiveObject iObject) {
+		if(item.getName().equals(iObject.getKeyItem()))
+		return ReactionMessage.SUCCESS;
+		else return ReactionMessage.ITEM_MISMATCH;
+	}
+	
+	public String inspect(Item item) {
+		return item.getDescription();
+	}
+	
+	public String inspect(InteractiveObject iObject) {
+		return iObject.getDescription();
 	}
 	
 	public Coord getCoord() {

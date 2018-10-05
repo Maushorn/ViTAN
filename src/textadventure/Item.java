@@ -4,21 +4,26 @@ public class Item {
 	
 	private String name;
 	private String description;
-	private InteractiveObject interactiveObject;
 	
 	public Item(String name) {
 		super();
 		this.name = name;
 		description = "";
-		interactiveObject = null;
 	}
 
+	public Item(String name, String description) {
+		super();
+		this.name = name;
+		this.description = description;
+	}
+	
 	/**Copy-Constructor
 	 * 
 	 * @param original
 	 */
 	public Item(Item original) {
-		
+		this.name = original.getName();
+		this.description = original.getDescription();
 	}
 	
 	public String getName() {
@@ -36,15 +41,5 @@ public class Item {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public InteractiveObject getInteractiveObject() {
-		return interactiveObject;
-	}
-
-	public void setInteractiveObject(InteractiveObject interactiveObject) {
-		this.interactiveObject = interactiveObject;
-	}
-
-	
 	
 }

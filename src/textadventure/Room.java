@@ -7,7 +7,7 @@ public class Room {
 	private String name;
 	private String description;
 	private Boolean empty;
-	private ArrayList<String> items;
+	private ArrayList<Item> items;
 	private ArrayList<InteractiveObject> interactiveObjects;
 	private Boolean startRoom;
 	
@@ -44,7 +44,9 @@ public class Room {
 		this.startRoom = false;
 	}
 	
-	/**Copy-Constructor
+	/**Copy-Constructor.
+	 * 
+	 * Attention: This does not copy the original's Item-Objects!
 	 * 
 	 * @param original
 	 */

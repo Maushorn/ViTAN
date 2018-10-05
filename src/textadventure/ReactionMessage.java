@@ -1,11 +1,16 @@
 package textadventure;
 
 public class ReactionMessage {
-	public static final int INVALID_MOVE;
-	public static final int VALID_MOVE;
+	public static final String INVALID_MOVE;
+	public static final String VALID_MOVE;
+	public static final String SUCCESS;
+	public static final String ITEM_MISMATCH;
 	
 	static {
-		VALID_MOVE = 0;
-		INVALID_MOVE = 1;
+		VALID_MOVE = "OK";
+		INVALID_MOVE = "This move is not possible.";
+		SUCCESS = "Success!";
+		ITEM_MISMATCH = "This is the wrong item.";
+		
 	}
 }
