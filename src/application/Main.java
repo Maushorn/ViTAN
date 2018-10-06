@@ -75,7 +75,7 @@ public class Main extends Application {
 			
 			Button btnStartTest = new Button("Test-Modus starten...");
 			btnStartTest.setOnAction(e -> {
-				TestDialog td = new TestDialog();
+				TestDialog td = new TestDialog(selectedAdventure);
 				td.showAndWait();
 				//TODO: implement!
 			});
