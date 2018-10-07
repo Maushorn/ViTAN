@@ -46,6 +46,7 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 			tempMap.setName(txtAdventureName.getText());
 			adventures.remove(map);
 			adventures.add(tempMap);
+			close();
 			});
 		Button btnEnd = new Button("Beenden");
 		

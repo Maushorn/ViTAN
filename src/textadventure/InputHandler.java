@@ -51,13 +51,19 @@ public class InputHandler {
 			else reactionMessage = player.useItem(player.getSpecificItem(inputArray[1]), player.getSpecificInteractiveObject(inputArray[3]));
 		}//inspect
 		else if(inputArray[0].equalsIgnoreCase("inspect")) {
-			for(Item i : player.getItems())
-				if (i.getName().equalsIgnoreCase(inputArray[1]))
-					reactionMessage = i.getDescription();
+			if(inputArray.length == 1) {
+				reactionMessage = player.getPosition().getDescription();
+			}
+			else if(!player.getItems().isEmpty()) {
+				for(Item i : player.getItems())
+					if (i.getName().equalsIgnoreCase(inputArray[1]))
+						reactionMessage = i.getDescription();
+			}
+			else if(!player.getPosition().getInteractiveObjects().isEmpty()) {
 			for(InteractiveObject iObj : player.getPosition().getInteractiveObjects())
 				if(iObj.getName().equalsIgnoreCase(inputArray[1]))
 					reactionMessage = iObj.getDescription();
-		
+			}
 		}
 		else reactionMessage = "no valid input";
 		//TODO Testing

@@ -48,15 +48,28 @@ public class AdventureMap {
 		map.get(1).add(new Room());
 	}
 
+	/**Copy-Constructor
+	 * 
+	 * @param original
+	 */
 	public AdventureMap(AdventureMap original) {
 		name = new SimpleStringProperty(original.getName());
 		map = new ArrayList<>();
 		for(int i = 0; i < original.getMap().size(); ++i) {
 			map.add(new ArrayList<>());
 			ArrayList<Room> originalColumn = original.getMap().get(i);
-			for(int j = 0; j < originalColumn.size(); ++j)
-				map.get(i).add(new Room(originalColumn.get(j)));
+			for(int j = 0; j < originalColumn.size(); ++j) {
+				Room r = new Room(originalColumn.get(j));
+				if(original.isStart(originalColumn.get(j))) {
+					r.setStartRoom(true);
+					this.setStart(r);
+				}
+				map.get(i).add(r);
+				
+					
+			}
 		}
+//		start = new Room(original.getStart());
 	}
 
 	public SimpleStringProperty nameProperty() {
@@ -135,6 +148,10 @@ public class AdventureMap {
 		return map;
 	}
 
+	private Boolean isStart(Room r) {
+		return r == start;
+	}
+	
 	public Room getStart() {
 		return start;
 	}

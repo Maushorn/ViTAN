@@ -32,8 +32,9 @@ public class Main extends Application {
 			AdventureMap testMap = new AdventureMap("TestAdventure");
 			adventures = new ArrayList<>();
 			adventures.add(testMap);
-			testMap.setRoomAt(1, 1, new Room("neuer Raum"));
-			adventures.add(new AdventureMap("Test 2"));
+			testMap.setRoomAt(1, 0, new Room("Raum 1"));
+			
+			
 			ArrayList<String> adventureNames = new ArrayList<>();
 			for(AdventureMap am : adventures)
 				adventureNames.add(am.getName());
