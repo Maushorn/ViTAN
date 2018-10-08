@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogEvent;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -37,6 +38,7 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 		this.mapColumns.setPadding(new Insets(BUTTON_SPACING));
 		this.mapColumns.setSpacing(BUTTON_SPACING);
 		this.setTitle("Adventure bearbeiten");
+		Label lblTitle = new Label("Titel des Abenteuers:");
 		TextField txtAdventureName = new TextField(map.getName());
 		updateButtons();
 		ScrollPane scrollPane = new ScrollPane(mapColumns);
@@ -50,7 +52,7 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 			});
 		Button btnEnd = new Button("Beenden");
 		
-		vBox.getChildren().addAll(txtAdventureName, scrollPane, btnSave);
+		vBox.getChildren().addAll(lblTitle, txtAdventureName, scrollPane, btnSave);
 		this.setResizable(true);
 		this.setWidth(500);
 		this.setHeight(500);

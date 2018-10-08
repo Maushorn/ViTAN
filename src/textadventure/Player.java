@@ -109,11 +109,12 @@ public class Player {
 	}
 	
 	public String takeSpecificItem(String itemName) {
+		if(!position.getItems().isEmpty())
 		for(Item i : position.getItems())
 			if(i.getName().equalsIgnoreCase(itemName)) {
 				items.add(i);
 				position.getItems().remove(i);
-				return ReactionMessage.SUCCESS;
+				return ReactionMessage.ITEM_TAKEN + itemName;
 			}
 		return ReactionMessage.ITEM_MISSING;
 	}

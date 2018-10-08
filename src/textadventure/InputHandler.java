@@ -68,6 +68,11 @@ public class InputHandler {
 				if(iObj.getName().equalsIgnoreCase(inputArray[1]))
 					reactionMessage = iObj.getDescription();
 			}else reactionMessage = ReactionMessage.ITEM_MISSING;
+		}//take
+		else if(inputArray[0].equalsIgnoreCase("take")) {
+			if(inputArray.length == 1)
+				reactionMessage = ReactionMessage.EXPLAIN_TAKE;
+			else reactionMessage = player.takeSpecificItem(inputArray[1]);
 		}
 		else reactionMessage = "no valid input";
 		//TODO Testing
