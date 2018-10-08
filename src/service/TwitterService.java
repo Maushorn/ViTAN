@@ -15,7 +15,7 @@ public class TwitterService {
 	private static final String ACCESS_TOKEN;
 	private static final String ACCESS_TOKEN_SECRET;
 	
-	//TODO: These keys shall be set over the GUI
+	//TODO: These keys shall be set through GUI
 	static {
 		CONSUMER_KEY = "eHTZPuGf3c4Cz29mkCLGeP8VJ";
 		CONSUMER_SECRET = "BwGyCqmpw2afiTXlQ7AqdJsWq9QhTka4JqhSAidnD8YmnXOU5r";
@@ -74,6 +74,11 @@ public class TwitterService {
 		DirectMessageList messageList = null;
 		try {
 			messageList = twitter.getDirectMessages(50);
+			String cursor = messageList.getNextCursor();
+			while(cursor!=null) {
+				messageList.addAll(twitter.getDirectMessages(50, cursor));
+				cursor = twitter.getDirectMessages(50, cursor).getNextCursor();
+			}
 		} catch (TwitterException e) {
 			e.printStackTrace();
 		} 
