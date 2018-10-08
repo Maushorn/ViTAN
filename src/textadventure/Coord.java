@@ -1,6 +1,8 @@
 package textadventure;
 
-public class Coord {
+import java.io.Serializable;
+
+public class Coord implements Serializable{
 
 	private int x;
 	private int y;

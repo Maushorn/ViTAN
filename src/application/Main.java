@@ -1,5 +1,11 @@
 package application;
 	
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javafx.application.Application;
@@ -15,25 +21,26 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 public class Main extends Application {
 	
-	private ArrayList<AdventureMap> adventures;
+	static ArrayList<AdventureMap> adventures;
 	private AdventureMap selectedAdventure;
 	private ObservableList<String> adventureNameList;
+	
 	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 
 			//TODO: placeholder AdventureMap
-			AdventureMap testMap = new AdventureMap("TestAdventure");
+//			AdventureMap testMap = new AdventureMap("TestAdventure");
 			adventures = new ArrayList<>();
-			adventures.add(testMap);
-			testMap.setRoomAt(1, 0, new Room("Raum 1"));
+//			adventures.add(testMap);
+//			testMap.setRoomAt(1, 0, new Room("Raum 1"));
 			
+			loadAdventures();
 			
 			ArrayList<String> adventureNames = new ArrayList<>();
 			for(AdventureMap am : adventures)
@@ -95,6 +102,10 @@ public class Main extends Application {
 				}
 			});
 			
+			primaryStage.setOnCloseRequest(e -> {
+				saveAdventures();
+			});
+			
 			root.getChildren().addAll(lbl1, adventureList, btnNewAdventure, btnEditAdventure,btnStartTest, btnStartOnline);
 			Scene scene = new Scene(root,400,400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -105,8 +116,44 @@ public class Main extends Application {
 		}
 	}
 	
+	public static void saveAdventures() {
+		ObjectOutputStream oos;
+		FileOutputStream fos;
+		for(AdventureMap am : adventures) {
+			try {
+				fos = new FileOutputStream(".\\Adventures\\" + am.getName() + ".ser");
+				oos = new ObjectOutputStream(fos);
+				am.prepareForSerialization();
+				oos.writeObject(am);
+				oos.close();
+				fos.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public static void loadAdventures() {
+		FileInputStream fis;
+		ObjectInputStream ois;
 		
+		try {
+			fis = new FileInputStream(".\\Adventures\\TestAdventure.ser");
+			ois = new ObjectInputStream(fis);
+			AdventureMap am = (AdventureMap)ois.readObject();
+			am.initAfterDeserialization();
+			adventures.add(am);
+			ois.close();
+			fis.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void main(String[] args) {

@@ -1,12 +1,14 @@
 package textadventure;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public class AdventureMap {
+public class AdventureMap implements Serializable{
 
-	private SimpleStringProperty name;
+	private String nameAsString;
+	transient private SimpleStringProperty name;
 	private ArrayList<ArrayList<Room>> map;
 	private Room start;
 	
@@ -160,6 +162,12 @@ public class AdventureMap {
 		this.start = start;
 	}
 	
+	public void prepareForSerialization() {
+		nameAsString = name.get();
+	}
 	
+	public void initAfterDeserialization() {
+		name = new SimpleStringProperty(nameAsString);
+	}
 	
 }

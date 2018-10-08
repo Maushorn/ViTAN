@@ -1,6 +1,8 @@
 package textadventure;
 
-public class InteractiveObject {
+import java.io.Serializable;
+
+public class InteractiveObject implements Serializable{
 
 	private String name;
 	private String description;
