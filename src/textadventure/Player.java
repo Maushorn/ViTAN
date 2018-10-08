@@ -85,8 +85,12 @@ public class Player {
 	}
 	
 	public String useItem(Item item, InteractiveObject iObject) {
+		if(item == null)
+			return ReactionMessage.ITEM_MISSING;
+		if(iObject == null)
+			return ReactionMessage.INTERACTIVE_OBJECT_MISSING;
 		if(item.getName().equals(iObject.getKeyItem()))
-		return ReactionMessage.SUCCESS;
+			return ReactionMessage.SUCCESS;
 		else return ReactionMessage.ITEM_MISMATCH;
 	}
 	

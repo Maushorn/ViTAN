@@ -42,13 +42,17 @@ public class InputHandler {
 					)
 				reactionMessage = player.moveLeft();
 		}//use
-		else if(inputArray[0].equals("use")) {
+		else if(inputArray[0].equals("use") && inputArray.length >= 3) {
 			if(
 					inputArray[2].equalsIgnoreCase("with") ||
-					inputArray[2].equalsIgnoreCase("and")
-					)
+					inputArray[2].equalsIgnoreCase("and")) {
+				if(inputArray.length > 3) 
 			reactionMessage = player.useItem(player.getSpecificItem(inputArray[1]), player.getSpecificInteractiveObject(inputArray[3]));
-			else reactionMessage = player.useItem(player.getSpecificItem(inputArray[1]), player.getSpecificInteractiveObject(inputArray[3]));
+				else {
+					reactionMessage = ReactionMessage.INVALID_INPUT;
+				}
+			}
+			else reactionMessage = player.useItem(player.getSpecificItem(inputArray[1]), player.getSpecificInteractiveObject(inputArray[2]));
 		}//inspect
 		else if(inputArray[0].equalsIgnoreCase("inspect")) {
 			if(inputArray.length == 1) {
@@ -63,7 +67,7 @@ public class InputHandler {
 			for(InteractiveObject iObj : player.getPosition().getInteractiveObjects())
 				if(iObj.getName().equalsIgnoreCase(inputArray[1]))
 					reactionMessage = iObj.getDescription();
-			}
+			}else reactionMessage = ReactionMessage.ITEM_MISSING;
 		}
 		else reactionMessage = "no valid input";
 		//TODO Testing
