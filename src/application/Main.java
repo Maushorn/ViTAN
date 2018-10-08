@@ -6,6 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javafx.application.Application;
@@ -138,15 +142,22 @@ public class Main extends Application {
 	public static void loadAdventures() {
 		FileInputStream fis;
 		ObjectInputStream ois;
-		
+		Path dir;
+		DirectoryStream<Path> ds;
 		try {
-			fis = new FileInputStream(".\\Adventures\\TestAdventure.ser");
-			ois = new ObjectInputStream(fis);
-			AdventureMap am = (AdventureMap)ois.readObject();
-			am.initAfterDeserialization();
-			adventures.add(am);
-			ois.close();
-			fis.close();
+			dir = Paths.get(".\\Adventures");
+			ds = Files.newDirectoryStream(dir, "*.ser");
+			for(Path p : ds) {
+//				System.out.println(p.getFileName());
+				fis = new FileInputStream(".\\Adventures\\" + p.getFileName());
+				ois = new ObjectInputStream(fis);
+				AdventureMap am = (AdventureMap)ois.readObject();
+				am.initAfterDeserialization();
+				adventures.add(am);
+				ois.close();
+				fis.close();
+			}
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

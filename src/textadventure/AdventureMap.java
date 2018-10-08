@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class AdventureMap implements Serializable{
 
-	private String nameAsString;
+	private String serializableName;
 	transient private SimpleStringProperty name;
 	private ArrayList<ArrayList<Room>> map;
 	private Room start;
@@ -163,11 +163,11 @@ public class AdventureMap implements Serializable{
 	}
 	
 	public void prepareForSerialization() {
-		nameAsString = name.get();
+		serializableName = name.get();
 	}
 	
 	public void initAfterDeserialization() {
-		name = new SimpleStringProperty(nameAsString);
+		name = new SimpleStringProperty(serializableName);
 	}
 	
 }
