@@ -2,13 +2,14 @@ package textadventure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Room implements Serializable{
 
 	private String name;
 	private String description;
 	private Boolean empty;
-	private ArrayList<Item> items;
+	private HashSet<Item> items;
 	private ArrayList<InteractiveObject> interactiveObjects;
 	private Boolean startRoom;
 	
@@ -17,7 +18,7 @@ public class Room implements Serializable{
 		this.name = name;
 		this.description = "<leer>";
 		this.empty = false;
-		this.items = new ArrayList<>();
+		this.items = new HashSet<>();
 		this.interactiveObjects = new ArrayList<>();
 		this.startRoom = false;
 		//TODO: Do I need these?
@@ -30,7 +31,7 @@ public class Room implements Serializable{
 		this.name = name;
 		this.description = "<leer>";
 		this.empty = false;
-		this.items = new ArrayList<>();
+		this.items = new HashSet<>();
 		this.interactiveObjects = new ArrayList<>();
 		this.startRoom = startRoom;
 	}
@@ -40,7 +41,7 @@ public class Room implements Serializable{
 		this.name = "<leer>";
 		this.description = "<leer>";
 		this.empty = true;
-		this.items = new ArrayList<>();
+		this.items = new HashSet<>();
 		this.interactiveObjects = new ArrayList<>();
 		this.startRoom = false;
 	}
@@ -56,8 +57,10 @@ public class Room implements Serializable{
 		name = original.getName();
 		description = original.getDescription();
 		empty = original.isEmpty();
-		items = new ArrayList<>();
+		items = new HashSet<>();
 		if(original.getItems() != null && !original.getItems().isEmpty())
+			for(Item item : original.getItems())
+				items.add(item);
 		interactiveObjects = new ArrayList<>();
 		if(original.getInteractiveObjects() != null && !original.getInteractiveObjects().isEmpty())
 		for(InteractiveObject iObj : original.getInteractiveObjects())
@@ -84,12 +87,27 @@ public class Room implements Serializable{
 		this.empty = empty;
 	}
 
-	public ArrayList<Item> getItems() {
+	public HashSet<Item> getItems() {
 		return items;
 	}
 
-	public void setItems(ArrayList<Item> items) {
+	public void setItems(HashSet<Item> items) {
 		this.items = items;
+	}
+	
+	public Item getItemWithName(String name) {
+		if(items != null && !items.isEmpty())
+			for(Item item : items)
+				if(item.getName().equals(name))
+					return item;
+		return null;
+	}
+	
+	public HashSet<String> getItemNames(){
+		HashSet<String> itemNames = new HashSet<>();
+		for(Item item : items)
+			itemNames.add(item.getName());
+		return itemNames;
 	}
 
 	public ArrayList<InteractiveObject> getInteractiveObjects() {
@@ -113,12 +131,12 @@ public class Room implements Serializable{
 	}
 
 	public void clear() {
-		String name = "<leer>";
-		String description = "<leer>";
-		Boolean empty = true;
-		ArrayList<String> items = new ArrayList<>();
-		ArrayList<InteractiveObject> interactiveObjects = new ArrayList<>();
-//		Boolean startRoom;
+		name = "<leer>";
+		description = "<leer>";
+		empty = true;
+		items = new HashSet<>();
+		interactiveObjects = new ArrayList<>();
+		startRoom = false;
 	}
 	
 	@Override

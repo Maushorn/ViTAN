@@ -20,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import textadventure.AdventureMap;
+import textadventure.Item;
 import textadventure.Room;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -37,15 +38,18 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			
+			adventures = new ArrayList<>();
 
 			//TODO: placeholder AdventureMap
 //			AdventureMap testMap = new AdventureMap("TestAdventure");
-			adventures = new ArrayList<>();
 //			adventures.add(testMap);
 //			testMap.setRoomAt(1, 0, new Room("Raum 1"));
 			
 			loadAdventures();
 			
+			//TODO: Test
+//			adventures.get(0).getStart().getItems().add(new Item("Schwert", "sehr scharf"));
 			ArrayList<String> adventureNames = new ArrayList<>();
 			for(AdventureMap am : adventures)
 				adventureNames.add(am.getName());
