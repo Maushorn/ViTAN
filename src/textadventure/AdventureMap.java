@@ -7,11 +7,12 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class AdventureMap implements Serializable{
 
+	static final long serialVersionUID = 555183l;
+	
 	private String serializableName;
 	transient private SimpleStringProperty name;
 	private ArrayList<ArrayList<Room>> map;
 	private Room start;
-	
 	
 	/**Initializes a Map with 3 times 3 Rooms, where the start-room is in the middle.
 	 * 

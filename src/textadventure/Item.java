@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class Item implements Serializable{
 	
+	static final long serialVersionUID = 555187l;
+	
 	private String name;
 	private String description;
 	

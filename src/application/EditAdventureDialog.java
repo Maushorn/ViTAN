@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -14,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -34,11 +36,11 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 	private TextField txtRoomName;
 	private TextArea txtRoomDescription;
 	private ComboBox<String> cBoxItems;
-	
+	private ComboBox<String> cBoxIObjects;
 	
 	static {
 		BUTTON_SPACING = 10;
-		BUTTON_SIZE = 100;
+		BUTTON_SIZE = 80;
 	}
 	
 	public EditAdventureDialog(AdventureMap map, ArrayList<AdventureMap> adventures) {
@@ -69,6 +71,7 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 		vBoxLeft.getChildren().addAll(lblTitle, txtAdventureName, scrollPane, btnSave);
 		
 		//RoomEdit
+		
 		Label lblRoomName = new Label("Name:");
 		txtRoomName.textProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -108,8 +111,9 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 				
 			}
 		});
-		Button btnSaveItem = new Button("Änderungen übernehmen");
-		btnSaveItem.setOnAction(e -> {
+		Button btnApplyItem = new Button("Änderungen übernehmen");
+		btnApplyItem.setOnAction(e -> {
+			//TODO: implement error message when no existing item is selected
 			selectedItem.setName(txtItemName.getText());
 			selectedItem.setDescription(txtItemDescription.getText());
 			cBoxItems.setItems(FXCollections.observableArrayList(selectedRoom.getItemNames()));
@@ -122,7 +126,12 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 			cBoxItems.setItems(FXCollections.observableArrayList(selectedRoom.getItemNames()));
 		});
 		HBox hBoxItemEditButtons = new HBox(BUTTON_SPACING);
-		hBoxItemEditButtons.getChildren().addAll(btnSaveItem, btnAddNewItem);
+		hBoxItemEditButtons.getChildren().addAll(btnApplyItem, btnAddNewItem);
+		
+		VBox vBoxItem = new VBox(BUTTON_SPACING);
+		vBoxItem.getChildren().addAll(cBoxItems, txtItemName, txtItemDescription, hBoxItemEditButtons);
+		TitledPane paneItem = new TitledPane("Raum", vBoxItem);
+		
 		
 		cBoxItems.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -134,10 +143,21 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 				}
 			}
 		});
-		//TODO: implement List and TextFields!
 		//EditIObjects
-		Label lblIObjects = new Label("Interaktive Objekte");
-		//TODO: implement List and TextFields!
+		cBoxIObjects = new ComboBox<>();
+		//implement logic!
+		TextField txtIObjectName = new TextField();
+		//implement logic!
+		TextArea txtIObjectDescription = new TextArea();
+		Button btnApplyIObject = new Button("Änderungen übernhmen");
+		HBox hBoxIObjectEditButtons = new HBox(BUTTON_SPACING);
+		
+		VBox vBox = new VBox(BUTTON_SPACING);
+		vBox.getChildren().addAll(cBoxIObjects, txtIObjectName, txtIObjectDescription, hBoxIObjectEditButtons);
+		TitledPane paneIObject = new TitledPane("Interagierbare Objekte", vBox);
+
+		Accordion acc = new Accordion(paneItem, paneIObject);
+		
 		VBox vBoxRight = new VBox(BUTTON_SPACING);
 		vBoxRight.setPrefWidth(250);
 		vBoxRight.getChildren().addAll(
@@ -146,11 +166,7 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 				lblRoomDescription,
 				txtRoomDescription,
 				lblItems,
-				cBoxItems,
-				txtItemName,
-				txtItemDescription,
-				hBoxItemEditButtons,
-				lblIObjects);
+				acc);
 		
 		
 		HBox hBox = new HBox(BUTTON_SPACING);
@@ -181,11 +197,12 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 					txtRoomName.setText(room.getName());
 					txtRoomDescription.setText(room.getDescription());
 					cBoxItems.setItems(FXCollections.observableArrayList(selectedRoom.getItemNames()));
-					
+					cBoxIObjects.setItems(FXCollections.observableArrayList(selectedRoom.getIObjectNames()));
 					//TODO: Test
-					for(String s : selectedRoom.getItemNames())
-					System.out.println(s);
-					System.out.println(selectedRoom.getItemNames().size());
+//					for(String s : selectedRoom.getItemNames())
+//					System.out.println(s);
+//					System.out.println(selectedRoom.getItemNames().size());
+					
 //					EditRoomDialog ed = new EditRoomDialog(room);
 //					ed.showAndWait();
 					button.setText(room.getName());

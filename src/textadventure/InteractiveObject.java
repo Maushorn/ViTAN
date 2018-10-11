@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class InteractiveObject implements Serializable{
 
+	static final long serialVersionUID = 555186l;
+	
 	private String name;
 	private String description;
 	private String keyItem;
