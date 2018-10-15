@@ -89,6 +89,8 @@ public class Player {
 			return ReactionMessage.ITEM_MISSING;
 		if(iObject == null)
 			return ReactionMessage.INTERACTIVE_OBJECT_MISSING;
+		if(iObject.getReward() == null)
+			return ReactionMessage.NO_REWARD;
 		if(item.getName().equals(iObject.getKeyItem()))
 			return ReactionMessage.SUCCESS;
 		else return ReactionMessage.ITEM_MISMATCH;

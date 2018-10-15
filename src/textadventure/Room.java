@@ -105,6 +105,14 @@ public class Room implements Serializable{
 		return null;
 	}
 	
+	public InteractiveObject getIObjectWithName(String name) {
+		if(interactiveObjects != null && !interactiveObjects.isEmpty())
+			for(InteractiveObject iObj : interactiveObjects)
+				if(iObj.getName().equals(name))
+					return iObj;
+		return null;
+	}
+	
 	public HashSet<String> getItemNames(){
 		HashSet<String> itemNames = new HashSet<>();
 		for(Item item : items)

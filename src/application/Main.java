@@ -1,5 +1,5 @@
 package application;
-	
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,108 +26,112 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class Main extends Application {
-	
+
 	static ArrayList<AdventureMap> adventures;
 	private AdventureMap selectedAdventure;
 	private ObservableList<String> adventureNameList;
-	
-	
+	private ArrayList<String> adventureNames;
+	private ListView<String> adventureList;
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			
 			adventures = new ArrayList<>();
+			adventureNames = new ArrayList<>();
+			// TODO: placeholder AdventureMap
+			// AdventureMap testMap = new AdventureMap("TestAdventure");
+			// adventures.add(testMap);
+			// testMap.setRoomAt(1, 0, new Room("Raum 1"));
 
-			//TODO: placeholder AdventureMap
-//			AdventureMap testMap = new AdventureMap("TestAdventure");
-//			adventures.add(testMap);
-//			testMap.setRoomAt(1, 0, new Room("Raum 1"));
-			
 			loadAdventures();
-			
-			//TODO: Test
-//			adventures.get(0).getStart().getItems().add(new Item("Schwert", "sehr scharf"));
-			ArrayList<String> adventureNames = new ArrayList<>();
-			for(AdventureMap am : adventures)
-				adventureNames.add(am.getName());
-			
-//			BorderPane root = new BorderPane();
+
+			// TODO: Test
+			// adventures.get(0).getStart().getItems().add(new Item("Schwert", "sehr
+			// scharf"));
+
+			// BorderPane root = new BorderPane();
 			VBox root = new VBox(10);
 			root.setPadding(new Insets(20));
 			Label lbl1 = new Label("Adventure auswählen");
-			ListView<String> adventureList = new ListView<>();
-			adventureNameList = FXCollections.observableArrayList(adventureNames);
-			adventureList.setItems(adventureNameList);
-			
-			Button btnNewAdventure = new Button("neues Adventure anlegen...");
+			adventureList = new ListView<>();
+			updateAdventureList();
+			Button btnNewAdventure = new Button("Neu");
 			btnNewAdventure.setOnAction(e -> {
 				EditAdventureDialog ed = new EditAdventureDialog(new AdventureMap("Neues Adventure"), adventures);
 				ed.showAndWait();
-				adventureNames.clear();
-				for(AdventureMap am : adventures) {
-					
-					adventureNames.add(am.getName());
-				}
-				adventureNameList = FXCollections.observableArrayList(adventureNames);
-				adventureList.setItems(adventureNameList);
-				
+				updateAdventureList();
+
 			});
-			Button btnEditAdventure = new Button("ausgewähltes Adventure bearbeiten...");
+			Button btnEditAdventure = new Button("Bearbeiten...");
 			btnEditAdventure.setDisable(true);
 			btnEditAdventure.setOnAction(e -> {
 				EditAdventureDialog ed = new EditAdventureDialog(selectedAdventure, adventures);
 				ed.showAndWait();
-				adventureNames.clear();
-				for(AdventureMap am : adventures) {
-					
-					adventureNames.add(am.getName());
-				}
-				adventureNameList = FXCollections.observableArrayList(adventureNames);
-				adventureList.setItems(adventureNameList);
+				updateAdventureList();
 			});
-			
+
+			// TODO: implement removing of serialized files
+			Button btnDeleteAdventure = new Button("Löschen");
+			btnDeleteAdventure.setOnAction(e -> {
+				adventures.remove(selectedAdventure);
+				updateAdventureList();
+			});
+
 			Button btnStartTest = new Button("Test-Modus starten...");
 			btnStartTest.setOnAction(e -> {
-				TestDialog td = new TestDialog(selectedAdventure);
+				TestDialog td = new TestDialog(new AdventureMap(selectedAdventure));
 				td.showAndWait();
-				//TODO: implement!
+				// TODO: implement!
 			});
-			
+
 			Button btnStartOnline = new Button("Online-Modus starten...");
-			//TODO: implement!
-	
+			// TODO: implement!
+
 			adventureList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 				@Override
 				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-					for(AdventureMap am : adventures) {
-						if(am.getName().equals(newValue))
+					for (AdventureMap am : adventures) {
+						if (am.getName().equals(newValue))
 							selectedAdventure = am;
 						btnEditAdventure.setDisable(false);
 					}
 				}
 			});
-			
+
 			primaryStage.setOnCloseRequest(e -> {
 				saveAdventures();
 			});
-			
-			root.getChildren().addAll(lbl1, adventureList, btnNewAdventure, btnEditAdventure,btnStartTest, btnStartOnline);
-			Scene scene = new Scene(root,400,400);
+
+			VBox vbEditButtons = new VBox(10);
+			vbEditButtons.getChildren().addAll(btnNewAdventure, btnEditAdventure, btnDeleteAdventure);
+			HBox hbAdventure = new HBox(10);
+			hbAdventure.getChildren().addAll(adventureList, vbEditButtons);
+			root.getChildren().addAll(lbl1, hbAdventure, btnStartTest, btnStartOnline);
+			Scene scene = new Scene(root, 400, 400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
+	private void updateAdventureList() {
+		ArrayList<String> adventureNames = new ArrayList<>();
+		for (AdventureMap am : adventures)
+			adventureNames.add(am.getName());
+		adventureNameList = FXCollections.observableArrayList(adventureNames);
+		adventureList.setItems(adventureNameList);
+	}
+
 	public static void saveAdventures() {
 		ObjectOutputStream oos;
 		FileOutputStream fos;
-		for(AdventureMap am : adventures) {
+		for (AdventureMap am : adventures) {
 			try {
 				fos = new FileOutputStream(".\\Adventures\\" + am.getName() + ".ser");
 				oos = new ObjectOutputStream(fos);
@@ -142,7 +146,15 @@ public class Main extends Application {
 			}
 		}
 	}
-	
+
+	public static void deleteAdventure(AdventureMap am) {
+		try {
+			Files.delete(Paths.get(".\\Adventures\\" + am.getName() + ".ser"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void loadAdventures() {
 		FileInputStream fis;
 		ObjectInputStream ois;
@@ -151,17 +163,17 @@ public class Main extends Application {
 		try {
 			dir = Paths.get(".\\Adventures");
 			ds = Files.newDirectoryStream(dir, "*.ser");
-			for(Path p : ds) {
-//				System.out.println(p.getFileName());
+			for (Path p : ds) {
+				// System.out.println(p.getFileName());
 				fis = new FileInputStream(".\\Adventures\\" + p.getFileName());
 				ois = new ObjectInputStream(fis);
-				AdventureMap am = (AdventureMap)ois.readObject();
+				AdventureMap am = (AdventureMap) ois.readObject();
 				am.initAfterDeserialization();
 				adventures.add(am);
 				ois.close();
 				fis.close();
 			}
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -170,7 +182,7 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}

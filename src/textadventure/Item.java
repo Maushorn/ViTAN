@@ -9,6 +9,11 @@ public class Item implements Serializable{
 	private String name;
 	private String description;
 	
+	public Item() {
+		this.name = "";
+		this.description = "";
+	}
+	
 	public Item(String name) {
 		super();
 		this.name = name;

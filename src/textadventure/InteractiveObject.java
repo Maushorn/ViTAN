@@ -9,26 +9,35 @@ public class InteractiveObject implements Serializable{
 	private String name;
 	private String description;
 	private String keyItem;
-	private String reward;
+	private Item reward;
 	
 	public InteractiveObject(String name) {
 		super();
 		this.name = name;
+		this.reward = null;
 	}
 	
+	/**Copy-Contructor
+	 * 
+	 * @param original
+	 */
 	public InteractiveObject(InteractiveObject original) {
 		super();
 		name = original.getName();
 		description = original.getDescription();
 		keyItem = original.getKeyItem();
-		reward = original.getReward();
+		reward = new Item(original.getReward());
 	}
 	
-	public String getReward() {
+	public void removeReward() {
+		reward = null;
+	}
+	
+	public Item getReward() {
 		return reward;
 	}
 
-	public void setReward(String reward) {
+	public void setReward(Item reward) {
 		this.reward = reward;
 	}
 	

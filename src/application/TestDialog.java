@@ -30,8 +30,8 @@ public class TestDialog extends Dialog {
 		txtInput.setPromptText("Befehl eingeben und mit Enter bestätigen.");
 		txtInput.setMinWidth(WIDTH);
 		txtInput.setOnAction(e -> {
-			txtOutput.appendText(txtInput.getText() + "\n");
-			txtOutput.appendText(handler.processInput(txtInput.getText()) + "\n");
+			txtOutput.appendText("Spieler: " + txtInput.getText() + "\n");
+			txtOutput.appendText("ViTan: " + handler.processInput(txtInput.getText()) + "\n");
 			txtInput.clear();
 		});
 		VBox vBox = new VBox(10);

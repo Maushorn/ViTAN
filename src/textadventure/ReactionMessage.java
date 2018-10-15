@@ -11,6 +11,8 @@ public class ReactionMessage {
 	public static final String INTERACTIVE_OBJECT_MISSING;
 	public static final String EXPLAIN_TAKE;
 	public static final String ITEM_TAKEN;
+	public static final String NO_REWARD;
+
 	
 	static {
 		VALID_MOVE = "OK";
@@ -23,5 +25,6 @@ public class ReactionMessage {
 		INVENTORY_EMPTY = "Your inventory is empty.";
 		EXPLAIN_TAKE = "Type \"take [item]\" to try to pick up a item.";
 		ITEM_TAKEN = "You picked up a ";
+		NO_REWARD = "Nothing happens...";
 	}
 }
