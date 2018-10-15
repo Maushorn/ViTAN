@@ -36,6 +36,7 @@ public class InputHandler {
 						InteractiveObject iObj = player.getSpecificInteractiveObject(inputArray[3]);
 						Item reward = iObj.getReward();
 						player.getItems().add(reward);
+						reactionMessage += "Du erhältst " + reward.getName();
 					}
 				}
 				else {

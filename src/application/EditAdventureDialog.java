@@ -152,12 +152,18 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 		// TODO: implement logic!
 		TextArea txtIObjectDescription = new TextArea();
 		TextField txtObjectKeyName = new TextField();
+		txtObjectKeyName.setPromptText("Name des Schlüssels");
+		TextField txtRewardName = new TextField();
+		txtRewardName.setPromptText("Name der Belohnung");
+		TextArea txtRewardDescription = new TextArea();
+		txtRewardDescription.setPromptText("Beschreibung der Belohnung");
 		Button btnApplyIObject = new Button("Änderungen übernehmen");
 		btnApplyIObject.setOnAction(e -> {
 			// TODO: error message when no iObject is selected
 			selectedIObject.setName(txtIObjectName.getText());
 			selectedIObject.setDescription(txtIObjectDescription.getText());
 			selectedIObject.setKeyItem(txtObjectKeyName.getText());
+			selectedIObject.setReward(new Item(txtRewardName.getText(), txtRewardDescription.getText()));
 			cBoxIObjects.setItems(FXCollections.observableArrayList(selectedRoom.getIObjectNames()));
 		});
 		Button btnAddNewIObject = new Button("Objekt hinzufügen");
@@ -166,6 +172,7 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 			selectedIObject = new InteractiveObject(txtIObjectName.getText());
 			selectedIObject.setDescription(txtIObjectDescription.getText());
 			selectedIObject.setKeyItem(txtObjectKeyName.getText());
+			selectedIObject.setReward(new Item(txtRewardName.getText(), txtRewardDescription.getText()));
 			selectedRoom.getInteractiveObjects().add(selectedIObject);
 			cBoxIObjects.setItems(FXCollections.observableArrayList(selectedRoom.getIObjectNames()));
 		});
@@ -179,13 +186,32 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 					txtIObjectName.setText(selectedIObject.getName());
 					txtIObjectDescription.setText(selectedIObject.getDescription());
 					txtObjectKeyName.setText(selectedIObject.getKeyItem());
+					if(selectedIObject.getReward() != null) {
+						txtRewardName.setText(selectedIObject.getReward().getName());
+						txtRewardDescription.setText(selectedIObject.getReward().getDescription());
+						}
+					else {
+						txtRewardName.setText("");
+						txtRewardDescription.setText("");
+					}
+					
 				}
 			}
 		});
 
 		VBox vBox = new VBox(BUTTON_SPACING);
-		vBox.getChildren().addAll(cBoxIObjects, new Label("Name:"), txtIObjectName, new Label("Beschreibung"),
-				txtIObjectDescription, new Label("Schlüssel-Item:"), txtObjectKeyName, hBoxIObjectEditButtons);
+		vBox.getChildren().addAll(
+				cBoxIObjects,
+				new Label("Name:"),
+				txtIObjectName,
+				new Label("Beschreibung:"),
+				txtIObjectDescription,
+				new Label("Schlüssel-Item:"),
+				txtObjectKeyName,
+				new Label("Verstecktes Item:"),
+				txtRewardName,
+				txtRewardDescription,
+				hBoxIObjectEditButtons);
 		TitledPane paneIObject = new TitledPane("Interagierbare Objekte", vBox);
 		Accordion acc = new Accordion(paneItem, paneIObject);
 
