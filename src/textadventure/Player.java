@@ -11,14 +11,15 @@ public class Player {
 	public Player(AdventureMap map) {
 		this.map = map;
 		items = new HashSet<>();
+		position = map.getStart();
 	}
 	
 	/**Should only be used for setting the start.
 	 * 
-	 * @param start
+	 * @param room
 	 */
-	public void setPosition(Room start) {
-		position = start;
+	public void setPosition(Room room) {
+		position = room;
 	}
 	
 	public HashSet<Item> getItems() {

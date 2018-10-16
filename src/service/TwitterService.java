@@ -23,6 +23,13 @@ public class TwitterService {
 		ACCESS_TOKEN_SECRET = "bk6W4SHLhW6vdwrCQbw9EaCPFt2hnL0dCLhufafMe1MGB";
 	}
 
+	
+	/**Returns a single User object with information from the specified Twitterhandle.
+	 * (preceded @ has to be omitted)
+	 * 
+	 * @param twitterHandle
+	 * @return
+	 */
 	public static User getTwitterUser(String twitterHandle) {
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
@@ -42,6 +49,11 @@ public class TwitterService {
 		return user;
 	}
 	
+	/**Returns a single User object with information from specified ID.
+	 * 
+	 * @param UserId
+	 * @return
+	 */
 	public static User getTwitterUser(long UserId) {
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
@@ -61,6 +73,10 @@ public class TwitterService {
 		return user;
 	}
 	
+	/*Returns a List of the last 30 days messages.
+	 * Caution: Messages are ordered from newest to oldest.
+	 * So for handling messages chronologically, you have to begin at the end!
+	 */
 	public static DirectMessageList getDirectMessages(){
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
@@ -85,8 +101,11 @@ public class TwitterService {
 		return messageList;
 	}
 	
+	/**Tweet something in case you want every follower to see it.
+	 * 
+	 * @param message
+	 */
 	public static void tweet(String message) {
-	 
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
 		configBuilder.setOAuthConsumerSecret(CONSUMER_SECRET);
@@ -106,6 +125,11 @@ public class TwitterService {
 		
 	}
 	
+	/**Send DirectMessage to User via TwitterHandle.
+	 * 
+	 * @param twitterhandle
+	 * @param message
+	 */
 	public static void sendDirectMessage(String twitterhandle, String message) {
 		
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
@@ -119,6 +143,29 @@ public class TwitterService {
 		Twitter twitter = twitterFactory.getInstance();
 		try {
 			twitter.sendDirectMessage(twitterhandle, message);
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**Send DirectMessage to User via UserID.
+	 * 
+	 * @param twitterhandle
+	 * @param message
+	 */
+	public static void sendDirectMessage(long UserID, String message) {
+		
+		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
+		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
+		configBuilder.setOAuthConsumerSecret(CONSUMER_SECRET);
+		configBuilder.setOAuthAccessToken(ACCESS_TOKEN);
+		configBuilder.setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
+		
+		Configuration config = configBuilder.build();
+		TwitterFactory twitterFactory = new TwitterFactory(config);
+		Twitter twitter = twitterFactory.getInstance();
+		try {
+			twitter.sendDirectMessage(UserID, message);
 		} catch (TwitterException e) {
 			e.printStackTrace();
 		}

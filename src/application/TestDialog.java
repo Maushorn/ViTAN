@@ -18,7 +18,7 @@ public class TestDialog extends Dialog {
 	
 	public TestDialog(AdventureMap map) {
 		Player player = new Player(map);
-		player.setPosition(map.getStart());
+//		player.setPosition(map.getStart());
 		InputHandler handler = new InputHandler(map, player);
 		this.setTitle("Test Window");
 		TextArea txtOutput = new TextArea();

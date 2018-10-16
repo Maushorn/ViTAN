@@ -41,17 +41,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			adventures = new ArrayList<>();
-			adventureNames = new ArrayList<>();
-			// TODO: placeholder AdventureMap
-			// AdventureMap testMap = new AdventureMap("TestAdventure");
-			// adventures.add(testMap);
-			// testMap.setRoomAt(1, 0, new Room("Raum 1"));
-
+			adventureNames = new ArrayList<>();			
 			loadAdventures();
-
-			// TODO: Test
-			// adventures.get(0).getStart().getItems().add(new Item("Schwert", "sehr
-			// scharf"));
 
 			// BorderPane root = new BorderPane();
 			VBox root = new VBox(10);
@@ -64,7 +55,6 @@ public class Main extends Application {
 				EditAdventureDialog ed = new EditAdventureDialog(new AdventureMap("Neues Adventure"), adventures);
 				ed.showAndWait();
 				updateAdventureList();
-
 			});
 			Button btnEditAdventure = new Button("Bearbeiten...");
 			btnEditAdventure.setDisable(true);
@@ -79,17 +69,21 @@ public class Main extends Application {
 			btnDeleteAdventure.setOnAction(e -> {
 				adventures.remove(selectedAdventure);
 				updateAdventureList();
+				deleteAdventure(selectedAdventure);
 			});
 
 			Button btnStartTest = new Button("Test-Modus starten...");
 			btnStartTest.setOnAction(e -> {
 				TestDialog td = new TestDialog(new AdventureMap(selectedAdventure));
 				td.showAndWait();
-				// TODO: implement!
 			});
 
 			Button btnStartOnline = new Button("Online-Modus starten...");
 			// TODO: implement!
+			btnStartOnline.setOnAction(e -> {
+				OnlineDialog od = new OnlineDialog();
+				od.showAndWait();
+			});
 
 			adventureList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 				@Override
@@ -147,14 +141,21 @@ public class Main extends Application {
 		}
 	}
 
+	/**Deletes specific AdventureMap that are serialized in Adventures folder.
+	 * 
+	 * @param am
+	 */
 	public static void deleteAdventure(AdventureMap am) {
 		try {
-			Files.delete(Paths.get(".\\Adventures\\" + am.getName() + ".ser"));
+			Files.deleteIfExists(Paths.get(".\\Adventures\\" + am.getName() + ".ser"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**Loads all saved AdventureMaps from .ser-file, deserializes them and puts them into adventures-List.
+	 * 
+	 */
 	public static void loadAdventures() {
 		FileInputStream fis;
 		ObjectInputStream ois;
