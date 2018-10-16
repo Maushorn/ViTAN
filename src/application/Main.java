@@ -81,7 +81,7 @@ public class Main extends Application {
 			Button btnStartOnline = new Button("Online-Modus starten...");
 			// TODO: implement!
 			btnStartOnline.setOnAction(e -> {
-				OnlineDialog od = new OnlineDialog();
+				OnlineDialog od = new OnlineDialog(selectedAdventure);
 				od.showAndWait();
 			});
 

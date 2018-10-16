@@ -2,6 +2,7 @@ package textadventure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javafx.beans.property.SimpleStringProperty;
 
@@ -145,6 +146,24 @@ public class AdventureMap implements Serializable{
 		if((map.size() <= x) || (map.get(x).size() <= y))
 			return null;
 		else return map.get(x).get(y);
+	}
+	
+	public ArrayList<Room> getAllRooms() {
+		ArrayList<Room> roomList = new ArrayList<>();
+		for(int i = 0; i < map.size(); ++i)
+			for(int j = 0; j < map.get(i).size(); j++) {
+				roomList.add(map.get(i).get(j));
+			}
+		return roomList;
+	}
+	
+	public HashSet<Item> getAllItems(){
+		HashSet<Item> items = new HashSet<>();
+		for(Room r : getAllRooms()) {
+			for(Item item : r.getItems())
+				items.add(item);
+		}
+		return items;
 	}
 	
 	public ArrayList<ArrayList<Room>> getMap() {

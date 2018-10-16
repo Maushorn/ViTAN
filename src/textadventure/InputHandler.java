@@ -73,7 +73,7 @@ public class InputHandler {
 		} else
 			reactionMessage = "no valid input";
 		// TODO Testing
-		testOutput(input, inputArray);
+//		testOutput(input, inputArray);
 
 		return reactionMessage;
 	}

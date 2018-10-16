@@ -6,9 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 import textadventure.AdventureMap;
+import textadventure.Item;
 import textadventure.Player;
+import textadventure.Room;
 import twitter4j.DirectMessage;
 
 public class DatabaseService {
@@ -197,12 +201,91 @@ public class DatabaseService {
 		return false;
 	}
 	
-	public static void saveGame(Player player, AdventureMap am) {
+	public static void putPlayerOnAdventure(long UserID, AdventureMap am) {
+		Connection conn = null;
+		PreparedStatement prepStmt = null;
+		try {
+			conn = DriverManager.getConnection(connString);
+			String insert = "INSERT INTO Location VALUES (?,?,?)";
+			prepStmt = conn.prepareStatement(insert);
+			prepStmt.setLong(1, UserID);
+			prepStmt.setString(2, am.getStart().getName());
+			prepStmt.setString(3, am.getName());
+			prepStmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(prepStmt!=null)
+					prepStmt.close();
+				if(conn!=null)
+					conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static HashSet<Item> loadInventory(long UserId, AdventureMap am) {
+		Connection conn = null;
+		Statement stmt = null;
+		HashSet<Item> inventory = new HashSet<>();
+		try {
+			conn = DriverManager.getConnection(connString);
+			stmt = conn.createStatement();
+			String select = "SELECT * FROM Inventory WHERE UserId=" + UserId + " AND Adventure='" + am.getName() + "'";
+			ResultSet result = stmt.executeQuery(select);
+			while(result.next()) {
+				for(Item item : am.getAllItems()) {
+					if(item.getName().equalsIgnoreCase(result.getString("Item"))) {
+						//TODO: remove Item from AdventureMap
+						inventory.add(item);
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(stmt!=null)
+					stmt.close();
+				if(conn!=null)
+					conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return inventory;
+	}
+	
+	//TODO: implement!
+	public static void saveGame(long USerID, Player player, AdventureMap am) {
 		//has Player already played the Adventure?
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+			conn = DriverManager.getConnection(connString);
+			stmt = conn.createStatement();
+			String searchMessage = "";
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(stmt!=null)
+					stmt.close();
+				if(conn!=null)
+					conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		
 	}
 	
-	public static Player loadGame(int UserID, AdventureMap am) {
+	public static Player loadRoom(int UserID, AdventureMap am) {
 		//TODO: Implement!!!
 		return null;
 	}

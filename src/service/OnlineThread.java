@@ -1,11 +1,21 @@
 package service;
 
+import textadventure.AdventureMap;
+import textadventure.InputHandler;
+import textadventure.Player;
 import twitter4j.DirectMessage;
 import twitter4j.DirectMessageList;
 
 public class OnlineThread implements Runnable {
 
-	Boolean endLoop = false;
+	private Boolean endLoop = false;
+	private AdventureMap am;
+	
+	
+	public OnlineThread(AdventureMap am) {
+		super();
+		this.am = am;
+	}
 
 	@Override
 	public void run() {
@@ -29,27 +39,35 @@ public class OnlineThread implements Runnable {
 		while(!endLoop) {
 			DirectMessageList messages = TwitterService.getDirectMessages();
 			for(DirectMessage dm : messages) {
-				//Is message already in database?
+				long UserId = dm.getSenderId();
 				if(DatabaseService.isMessageInDatabase(dm))
 					//Message was handled already and no further action is required for this message.
 					continue;
 				else {
 					//The message is new. Get Player State.
+					Player player = new Player(am);
+					if(!DatabaseService.isPlayerOnAdventure(UserId, am)) {
+						DatabaseService.putPlayerOnAdventure(UserId, am);
+					}
+					//load Inventory
+					player.setItems(DatabaseService.loadInventory(UserId, am));
+					//load Room
 					
+					InputHandler handler = new InputHandler(am, player);
+					
+					//TODO: Test
+					System.out.println(dm.getText());
+					System.out.println(handler.processInput(dm.getText()));
 				}
+				
 			}
-			
-			
 			try {
 				//set sleep time to at least a minute (60 * 1000)
-				Thread.sleep(1000);
+				Thread.sleep(1000 * 60);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
 		}
-		
-		
 	}
 
 	public void setEndLoop(boolean b) {

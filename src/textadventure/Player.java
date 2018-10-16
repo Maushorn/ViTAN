@@ -26,6 +26,10 @@ public class Player {
 		return items;
 	}
 	
+	public void setItems(HashSet<Item> items) {
+		this.items = items;
+	}
+	
 	public Item getSpecificItem(String itemName) {
 		for(Item i : items)
 			if(i.getName().equalsIgnoreCase(itemName))
