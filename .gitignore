@@ -4,3 +4,7 @@ build.fxbuild
 .classpath
 bin/
 Adventures/
+.idea/
+DB/
+Libraries/
+derby.log
