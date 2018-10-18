@@ -68,16 +68,11 @@ public class OnlineThread implements Runnable {
 						player.setPosition(DatabaseService.loadRoom(userID, am));
 					
 					InputHandler handler = new InputHandler(am, player);
-					//send answer to UserID
+					//send answer to UserID and process Input
 					TwitterService.sendDirectMessage(userID, handler.processInput(dm.getText()));
 					
 					DatabaseService.saveGame(userID, player, am);
-					
-					
-					
-					//TODO: Test
-					System.out.println(dm.getText());
-					System.out.println(handler.processInput(dm.getText()));
+
 				}
 				
 			}

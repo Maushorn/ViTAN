@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import textadventure.AdventureMap;
@@ -17,7 +16,7 @@ import twitter4j.DirectMessage;
 
 public class DatabaseService {
 
-	public static final String DBlocation = "C:\\Users\\janoc\\Desktop\\ViTAN\\DB";
+	public static final String DBlocation = ".\\DB";
 	public static final String connString = "jdbc:derby:" + DBlocation + ";create=true";
 	
 	
