@@ -10,10 +10,10 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterService {
 
-	private static final String CONSUMER_KEY;
-	private static final String CONSUMER_SECRET;
-	private static final String ACCESS_TOKEN;
-	private static final String ACCESS_TOKEN_SECRET;
+	private static String CONSUMER_KEY;
+	private static String CONSUMER_SECRET;
+	private static String ACCESS_TOKEN;
+	private static String ACCESS_TOKEN_SECRET;
 	
 	//TODO: These keys shall be set through GUI
 	static {

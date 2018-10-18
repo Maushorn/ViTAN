@@ -18,15 +18,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import service.DatabaseService;
 import textadventure.AdventureMap;
 import textadventure.Item;
 import textadventure.Room;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -47,6 +45,18 @@ public class Main extends Application {
 			loadAdventures();
 
 			// BorderPane root = new BorderPane();
+
+			//TODO: implement Menu
+			MenuBar menuBar = new MenuBar();
+			Menu edit = new Menu("_Edit");
+			MenuItem authMI = new MenuItem("Authentifizierung bearbeiten...");
+			edit.getItems().addAll(authMI);
+			menuBar.getMenus().addAll(edit);
+			authMI.setOnAction(e -> {
+				AuthenticationDialog ad = new AuthenticationDialog();
+				ad.showAndWait();
+			});
+
 			VBox root = new VBox(10);
 			root.setPadding(new Insets(20));
 			Label lbl1 = new Label("Adventure auswählen");
@@ -81,7 +91,6 @@ public class Main extends Application {
 			});
 
 			Button btnStartOnline = new Button("Online-Modus starten...");
-			// TODO: implement!
 			btnStartOnline.setOnAction(e -> {
 				OnlineDialog od = new OnlineDialog(selectedAdventure);
 				od.showAndWait();
@@ -107,7 +116,10 @@ public class Main extends Application {
 			HBox hbAdventure = new HBox(10);
 			hbAdventure.getChildren().addAll(adventureList, vbEditButtons);
 			root.getChildren().addAll(lbl1, hbAdventure, btnStartTest, btnStartOnline);
-			Scene scene = new Scene(root, 400, 400);
+			VBox parent = new VBox();
+			parent.getChildren().addAll(menuBar, root);
+			Scene scene = new Scene(parent, 400, 400);
+
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
