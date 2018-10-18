@@ -19,6 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
+import service.DatabaseService;
 import textadventure.AdventureMap;
 import textadventure.Item;
 import textadventure.Room;
@@ -40,6 +41,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+
 			adventures = new ArrayList<>();
 			adventureNames = new ArrayList<>();			
 			loadAdventures();
