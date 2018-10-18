@@ -157,7 +157,7 @@ public class DatabaseService {
 			prepStmt.setLong(1, dm.getId());
 			prepStmt.setLong(2, dm.getSenderId());
 			prepStmt.setString(3, am.getName());
-			prepStmt.executeUpdate(insert);
+			prepStmt.executeUpdate();
 		
 			
 		} catch (SQLException e) {
@@ -174,13 +174,13 @@ public class DatabaseService {
 		}
 	}
 	
-	public static Boolean isPlayerOnAdventure(long UserID, AdventureMap am) {
+	public static Boolean isPlayerOnAdventure(long userID, AdventureMap am) {
 		Connection conn = null;
 		Statement stmt = null;
 		try {
 			conn = DriverManager.getConnection(connString);
 			stmt = conn.createStatement();
-			String searchMessage = "SELECT * FROM Location WHERE UserID = " + UserID + " AND Adventure = '" + am.getName() + "'";
+			String searchMessage = "SELECT * FROM Location WHERE UserID = " + userID + " AND Adventure = '" + am.getName() + "'";
 			ResultSet result = stmt.executeQuery(searchMessage);
 			if(result.next())
 				return true;
@@ -201,14 +201,14 @@ public class DatabaseService {
 		return false;
 	}
 	
-	public static void putPlayerOnAdventure(long UserID, AdventureMap am) {
+	public static void putPlayerOnAdventure(long userID, AdventureMap am) {
 		Connection conn = null;
 		PreparedStatement prepStmt = null;
 		try {
 			conn = DriverManager.getConnection(connString);
 			String insert = "INSERT INTO Location VALUES (?,?,?)";
 			prepStmt = conn.prepareStatement(insert);
-			prepStmt.setLong(1, UserID);
+			prepStmt.setLong(1, userID);
 			prepStmt.setString(2, am.getStart().getName());
 			prepStmt.setString(3, am.getName());
 			prepStmt.executeUpdate();
@@ -227,14 +227,14 @@ public class DatabaseService {
 		}
 	}
 	
-	public static HashSet<Item> loadInventory(long UserId, AdventureMap am) {
+	public static HashSet<Item> loadInventory(long userId, AdventureMap am) {
 		Connection conn = null;
 		Statement stmt = null;
 		HashSet<Item> inventory = new HashSet<>();
 		try {
 			conn = DriverManager.getConnection(connString);
 			stmt = conn.createStatement();
-			String select = "SELECT * FROM Inventory WHERE UserId=" + UserId + " AND Adventure='" + am.getName() + "'";
+			String select = "SELECT * FROM Inventory WHERE UserId=" + userId + " AND Adventure='" + am.getName() + "'";
 			ResultSet result = stmt.executeQuery(select);
 			while(result.next()) {
 				for(Item item : am.getAllItems()) {
@@ -259,16 +259,30 @@ public class DatabaseService {
 		return inventory;
 	}
 	
-	//TODO: implement!
-	public static void saveGame(long USerID, Player player, AdventureMap am) {
-		//has Player already played the Adventure?
+	public static void saveGame(long userID, Player player, AdventureMap am) {
 		Connection conn = null;
 		Statement stmt = null;
 		try {
 			conn = DriverManager.getConnection(connString);
 			stmt = conn.createStatement();
-			String searchMessage = "";
 			
+			//save intenvory
+			for(Item item : player.getItems()) {
+				String select = "SELECT * FROM Inventory WHERE Item='" + item.getName() + "' AND UserID=" + userID;
+				ResultSet result = stmt.executeQuery(select);
+				if(!result.next()) {
+					String insert = "INSERT INTO Inventory VALUES(?,?,?)";
+					PreparedStatement prepStmt = conn.prepareStatement(insert);
+					prepStmt.setLong(1, userID);
+					prepStmt.setString(2, item.getName());
+					prepStmt.setString(3, am.getName());
+					prepStmt.executeUpdate();
+				}
+			}
+			//Update room
+			String update = "UPDATE Location SET Room='" + player.getPosition().getName() + "' WHERE "
+					+ "UserID=" + userID + " AND Adventure='" + am.getName() + "'";
+			stmt.executeUpdate(update);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -285,8 +299,34 @@ public class DatabaseService {
 		
 	}
 	
-	public static Player loadRoom(int UserID, AdventureMap am) {
-		//TODO: Implement!!!
+	public static Room loadRoom(long userID, AdventureMap am) {
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+			conn = DriverManager.getConnection(connString);
+			stmt = conn.createStatement();
+			String select = "SELECT Room FROM Location WHERE UserID =" + userID + " AND Adventure='" + am.getName() + "'";
+			ResultSet result = stmt.executeQuery(select);
+			String roomName = "";
+			while(result.next()) {
+				roomName = result.getString(1);
+			}
+			for(Room r : am.getAllRooms())
+				if(r.getName().equals(roomName))
+					return r;
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(stmt!=null)
+					stmt.close();
+				if(conn!=null)
+					conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		return null;
 	}
 	

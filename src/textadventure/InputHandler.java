@@ -17,17 +17,17 @@ public class InputHandler {
 		String reactionMessage = "";
 		
 		// move
-		if (inputArray[0].equals("go") || inputArray[0].equals("move")) {
-			if (inputArray[1].equals("up") || inputArray[1].equals("north"))
+		if (inputArray[0].equalsIgnoreCase("go") || inputArray[0].equalsIgnoreCase("move")) {
+			if (inputArray[1].equalsIgnoreCase("up") || inputArray[1].equalsIgnoreCase("north"))
 				reactionMessage = player.moveUp();
-			else if (inputArray[1].equals("right") || inputArray[1].equals("east"))
+			else if (inputArray[1].equalsIgnoreCase("right") || inputArray[1].equalsIgnoreCase("east"))
 				reactionMessage = player.moveRight();
-			else if (inputArray[1].equals("down") || inputArray[1].equals("south"))
+			else if (inputArray[1].equalsIgnoreCase("down") || inputArray[1].equalsIgnoreCase("south"))
 				reactionMessage = player.moveDown();
-			else if (inputArray[1].equals("left") || inputArray[1].equals("west"))
+			else if (inputArray[1].equalsIgnoreCase("left") || inputArray[1].equalsIgnoreCase("west"))
 				reactionMessage = player.moveLeft();
 		} // use
-		else if (inputArray[0].equals("use") && inputArray.length >= 3) {
+		else if (inputArray[0].equalsIgnoreCase("use") && inputArray.length >= 3) {
 			if (inputArray[2].equalsIgnoreCase("with") || inputArray[2].equalsIgnoreCase("and")) {
 				if (inputArray.length > 3) {
 					reactionMessage = player.useItem(player.getSpecificItem(inputArray[1]),
@@ -70,7 +70,9 @@ public class InputHandler {
 				reactionMessage = ReactionMessage.EXPLAIN_TAKE;
 			else
 				reactionMessage = player.takeSpecificItem(inputArray[1]);
-		} else
+		}else if(inputArray[0].equalsIgnoreCase("inventory"))
+			reactionMessage = player.getInventoryString();
+		else
 			reactionMessage = "no valid input";
 		// TODO Testing
 //		testOutput(input, inputArray);

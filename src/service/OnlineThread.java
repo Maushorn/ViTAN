@@ -3,6 +3,7 @@ package service;
 import textadventure.AdventureMap;
 import textadventure.InputHandler;
 import textadventure.Player;
+import textadventure.Room;
 import twitter4j.DirectMessage;
 import twitter4j.DirectMessageList;
 
@@ -34,26 +35,45 @@ public class OnlineThread implements Runnable {
 		
 			//put message into database
 		
-		
+		long ownID = TwitterService.getOwnUserID(); 
 
 		while(!endLoop) {
 			DirectMessageList messages = TwitterService.getDirectMessages();
-			for(DirectMessage dm : messages) {
-				long UserId = dm.getSenderId();
-				if(DatabaseService.isMessageInDatabase(dm))
+			//remove old messages
+//			for(int i = 0; i <= messages.size(); ++i) {
+//				messages.get(i).getCreatedAt()
+//				if(messages.get(i).getCreatedAt().before(new Date().setDate(new Date().getDate()-1))) {
+//					
+//				}
+//			}
+			
+			for(int i = messages.size()-1; i >= 0; --i) {
+				DirectMessage dm = messages.get(i);
+				long userID = dm.getSenderId();
+				if(ownID == dm.getSenderId() || DatabaseService.isMessageInDatabase(dm))
 					//Message was handled already and no further action is required for this message.
 					continue;
 				else {
+					DatabaseService.insertMessage(dm, am);
 					//The message is new. Get Player State.
 					Player player = new Player(am);
-					if(!DatabaseService.isPlayerOnAdventure(UserId, am)) {
-						DatabaseService.putPlayerOnAdventure(UserId, am);
+					if(!DatabaseService.isPlayerOnAdventure(userID, am)) {
+						DatabaseService.putPlayerOnAdventure(userID, am);
 					}
 					//load Inventory
-					player.setItems(DatabaseService.loadInventory(UserId, am));
+					player.setItems(DatabaseService.loadInventory(userID, am));
 					//load Room
+					Room r = DatabaseService.loadRoom(userID, am);
+					if(r != null)
+						player.setPosition(DatabaseService.loadRoom(userID, am));
 					
 					InputHandler handler = new InputHandler(am, player);
+					//send answer to UserID
+					TwitterService.sendDirectMessage(userID, handler.processInput(dm.getText()));
+					
+					DatabaseService.saveGame(userID, player, am);
+					
+					
 					
 					//TODO: Test
 					System.out.println(dm.getText());

@@ -51,10 +51,10 @@ public class TwitterService {
 	
 	/**Returns a single User object with information from specified ID.
 	 * 
-	 * @param UserId
+	 * @param userId
 	 * @return
 	 */
-	public static User getTwitterUser(long UserId) {
+	public static User getTwitterUser(long userId) {
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
 		configBuilder.setOAuthConsumerSecret(CONSUMER_SECRET);
@@ -66,16 +66,18 @@ public class TwitterService {
 		Twitter twitter = twitterFactory.getInstance();
 		User user = null;
 		try {
-			user = twitter.showUser(UserId);
+			user = twitter.showUser(userId);
 		} catch (TwitterException e) {
 			e.printStackTrace();
 		}
 		return user;
 	}
 	
-	/*Returns a List of the last 30 days messages.
+	/**Returns a List of the last 30 day's messages.
 	 * Caution: Messages are ordered from newest to oldest.
 	 * So for handling messages chronologically, you have to begin at the end!
+	 * 
+	 * @return
 	 */
 	public static DirectMessageList getDirectMessages(){
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
@@ -153,7 +155,7 @@ public class TwitterService {
 	 * @param twitterhandle
 	 * @param message
 	 */
-	public static void sendDirectMessage(long UserID, String message) {
+	public static void sendDirectMessage(long userID, String message) {
 		
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
@@ -165,10 +167,32 @@ public class TwitterService {
 		TwitterFactory twitterFactory = new TwitterFactory(config);
 		Twitter twitter = twitterFactory.getInstance();
 		try {
-			twitter.sendDirectMessage(UserID, message);
+			twitter.sendDirectMessage(userID, message);
 		} catch (TwitterException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static long getOwnUserID() {
+		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
+		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
+		configBuilder.setOAuthConsumerSecret(CONSUMER_SECRET);
+		configBuilder.setOAuthAccessToken(ACCESS_TOKEN);
+		configBuilder.setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
+		
+		Configuration config = configBuilder.build();
+		TwitterFactory twitterFactory = new TwitterFactory(config);
+		Twitter twitter = twitterFactory.getInstance();
+		try {
+			return twitter.getId();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TwitterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
 	}
 	
 }
