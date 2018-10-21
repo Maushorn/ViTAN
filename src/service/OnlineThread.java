@@ -1,5 +1,6 @@
 package service;
 
+import application.AuthenticationInfo;
 import textadventure.AdventureMap;
 import textadventure.InputHandler;
 import textadventure.Player;
@@ -7,19 +8,41 @@ import textadventure.Room;
 import twitter4j.DirectMessage;
 import twitter4j.DirectMessageList;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 public class OnlineThread implements Runnable {
 
 	private Boolean endLoop = false;
 	private AdventureMap am;
-	
+	private long ownID;
+	TwitterService twitter;
 	
 	public OnlineThread(AdventureMap am) {
 		super();
 		this.am = am;
+		FileInputStream fis;
+		ObjectInputStream ois;
+		AuthenticationInfo info = null;
+		try {
+			fis = new FileInputStream(".\\ConfigData.ser");
+			ois = new ObjectInputStream(fis);
+			info = (AuthenticationInfo)ois.readObject();
+
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+//TODO: what if info is null?
+		twitter = new TwitterService(info);
+        ownID = twitter.getOwnUserID();
+
 	}
 
 	@Override
 	public void run() {
+
+
 
 		//TODO get messages
 		
@@ -35,10 +58,17 @@ public class OnlineThread implements Runnable {
 		
 			//put message into database
 		
-		long ownID = TwitterService.getOwnUserID(); 
+
 
 		while(!endLoop) {
-			DirectMessageList messages = TwitterService.getDirectMessages();
+			DirectMessageList messages = null;
+			try {
+				messages = twitter.getDirectMessages();
+			}catch(Exception ex){
+				System.out.println("Messages konnten nicht abgerufen werden.");
+				messages = null;
+				ex.printStackTrace();
+			}
 			//remove old messages
 //			for(int i = 0; i <= messages.size(); ++i) {
 //				messages.get(i).getCreatedAt()
@@ -46,7 +76,7 @@ public class OnlineThread implements Runnable {
 //					
 //				}
 //			}
-			
+			if(messages != null)
 			for(int i = messages.size()-1; i >= 0; --i) {
 				DirectMessage dm = messages.get(i);
 				long userID = dm.getSenderId();
@@ -69,7 +99,7 @@ public class OnlineThread implements Runnable {
 					
 					InputHandler handler = new InputHandler(am, player);
 					//send answer to UserID and process Input
-					TwitterService.sendDirectMessage(userID, handler.processInput(dm.getText()));
+					twitter.sendDirectMessage(userID, handler.processInput(dm.getText()));
 					
 					DatabaseService.saveGame(userID, player, am);
 

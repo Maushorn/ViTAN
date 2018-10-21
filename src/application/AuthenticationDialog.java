@@ -1,11 +1,13 @@
 package application;
 
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.nio.file.Paths;
 
 public class AuthenticationDialog extends Dialog {
 
@@ -37,13 +39,33 @@ public class AuthenticationDialog extends Dialog {
         consumerSecretHBox.getChildren().addAll(consumerSecretLabel, consumerSecretTxt);
         accessTokenHBox.getChildren().addAll(accessTokenLabel, accessTokenTxt);
         accessTokenSecretHbox.getChildren().addAll(accessTokenSecretLabel, accessTokenSecretTxt);
+
+        Button saveBtn = new Button("Übernehmen");
+        saveBtn.setOnAction(e -> {
+            AuthenticationInfo authInfo = new AuthenticationInfo(
+                    consumerKeyTxt.getText(),
+                    consumerSecretTxt.getText(),
+                    accessTokenTxt.getText(),
+                    accessTokenSecretTxt.getText());
+            FileOutputStream fos;
+            ObjectOutputStream os;
+            try {
+                fos = new FileOutputStream(".\\ConfigData.ser");
+                os = new ObjectOutputStream(fos);
+                os.writeObject(authInfo);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+        });
+
         vBox.getChildren().addAll(
                 consumerKeyHBox,
                 consumerSecretHBox,
                 accessTokenHBox,
-                accessTokenSecretHbox
+                accessTokenSecretHbox,
+                saveBtn
         );
-
 
         this.getDialogPane().setContent(vBox);
         this.setOnCloseRequest(e -> {

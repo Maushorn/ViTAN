@@ -1,5 +1,6 @@
 package service;
 
+import application.AuthenticationInfo;
 import twitter4j.DirectMessageList;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -10,17 +11,17 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterService {
 
-	private static String CONSUMER_KEY;
-	private static String CONSUMER_SECRET;
-	private static String ACCESS_TOKEN;
-	private static String ACCESS_TOKEN_SECRET;
+	private final String CONSUMER_KEY;
+	private final String CONSUMER_SECRET;
+	private final String ACCESS_TOKEN;
+	private final String ACCESS_TOKEN_SECRET;
 	
 	//TODO: These keys shall be set through GUI
-	static {
-		CONSUMER_KEY = "eHTZPuGf3c4Cz29mkCLGeP8VJ";
-		CONSUMER_SECRET = "BwGyCqmpw2afiTXlQ7AqdJsWq9QhTka4JqhSAidnD8YmnXOU5r";
-		ACCESS_TOKEN = "1015692032541646849-qiuENhpnzFNG4IKO4l1fbTLHB8xnn6";
-		ACCESS_TOKEN_SECRET = "bk6W4SHLhW6vdwrCQbw9EaCPFt2hnL0dCLhufafMe1MGB";
+	TwitterService(AuthenticationInfo info) {
+		CONSUMER_KEY = info.getCONSUMER_KEY();
+		CONSUMER_SECRET = info.getCONSUMER_SECRET();
+		ACCESS_TOKEN = info.getACCESS_TOKEN();
+		ACCESS_TOKEN_SECRET = info.getACCESS_TOKEN_SECRET();
 	}
 
 	
@@ -30,7 +31,7 @@ public class TwitterService {
 	 * @param twitterHandle
 	 * @return
 	 */
-	public static User getTwitterUser(String twitterHandle) {
+	public User getTwitterUser(String twitterHandle) {
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
 		configBuilder.setOAuthConsumerSecret(CONSUMER_SECRET);
@@ -54,7 +55,7 @@ public class TwitterService {
 	 * @param userId
 	 * @return
 	 */
-	public static User getTwitterUser(long userId) {
+	public User getTwitterUser(long userId) {
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
 		configBuilder.setOAuthConsumerSecret(CONSUMER_SECRET);
@@ -79,7 +80,10 @@ public class TwitterService {
 	 * 
 	 * @return
 	 */
-	public static DirectMessageList getDirectMessages(){
+	public DirectMessageList getDirectMessages(){
+		//TODO: Test-Output
+		System.out.println("DirectMessages werden abgerufen");
+
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
 		configBuilder.setOAuthConsumerSecret(CONSUMER_SECRET);
@@ -92,11 +96,13 @@ public class TwitterService {
 		DirectMessageList messageList = null;
 		try {
 			messageList = twitter.getDirectMessages(50);
-			String cursor = messageList.getNextCursor();
-			while(cursor!=null) {
-				messageList.addAll(twitter.getDirectMessages(50, cursor));
-				cursor = twitter.getDirectMessages(50, cursor).getNextCursor();
-			}
+			//TODO: For the moment I have to comment this out because of the rate limit.
+			//Only 50 messages can be read at one request.
+//			String cursor = messageList.getNextCursor();
+//			while(cursor!=null) {
+//				messageList.addAll(twitter.getDirectMessages(50, cursor));
+//				cursor = twitter.getDirectMessages(50, cursor).getNextCursor();
+//			}
 		} catch (TwitterException e) {
 			e.printStackTrace();
 		} 
@@ -107,7 +113,7 @@ public class TwitterService {
 	 * 
 	 * @param message
 	 */
-	public static void tweet(String message) {
+	public void tweet(String message) {
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
 		configBuilder.setOAuthConsumerSecret(CONSUMER_SECRET);
@@ -132,7 +138,7 @@ public class TwitterService {
 	 * @param twitterhandle
 	 * @param message
 	 */
-	public static void sendDirectMessage(String twitterhandle, String message) {
+	public void sendDirectMessage(String twitterhandle, String message) {
 		
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
@@ -152,10 +158,10 @@ public class TwitterService {
 	
 	/**Send DirectMessage to User via UserID.
 	 * 
-	 * @param twitterhandle
+	 * @param userID
 	 * @param message
 	 */
-	public static void sendDirectMessage(long userID, String message) {
+	public void sendDirectMessage(long userID, String message) {
 		
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
@@ -173,7 +179,7 @@ public class TwitterService {
 		}
 	}
 	
-	public static long getOwnUserID() {
+	public long getOwnUserID() {
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);
 		configBuilder.setOAuthConsumerSecret(CONSUMER_SECRET);

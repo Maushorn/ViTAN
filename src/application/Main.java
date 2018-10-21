@@ -89,12 +89,14 @@ public class Main extends Application {
 				TestDialog td = new TestDialog(new AdventureMap(selectedAdventure));
 				td.showAndWait();
 			});
+			btnStartTest.setDisable(true);
 
 			Button btnStartOnline = new Button("Online-Modus starten...");
 			btnStartOnline.setOnAction(e -> {
 				OnlineDialog od = new OnlineDialog(selectedAdventure);
 				od.showAndWait();
 			});
+			btnStartOnline.setDisable(true);
 
 			adventureList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 				@Override
@@ -103,6 +105,8 @@ public class Main extends Application {
 						if (am.getName().equals(newValue))
 							selectedAdventure = am;
 						btnEditAdventure.setDisable(false);
+						btnStartTest.setDisable(false);
+						btnStartOnline.setDisable(false);
 					}
 				}
 			});
