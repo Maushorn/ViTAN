@@ -40,7 +40,7 @@ public class AuthenticationDialog extends Dialog {
         accessTokenHBox.getChildren().addAll(accessTokenLabel, accessTokenTxt);
         accessTokenSecretHbox.getChildren().addAll(accessTokenSecretLabel, accessTokenSecretTxt);
 
-        Button saveBtn = new Button("Übernehmen");
+        Button saveBtn = new Button("\u00DCbernehmen");
         saveBtn.setOnAction(e -> {
             AuthenticationInfo authInfo = new AuthenticationInfo(
                     consumerKeyTxt.getText(),
