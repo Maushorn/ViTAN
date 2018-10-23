@@ -80,9 +80,14 @@ public class OnlineThread implements Runnable {
 			for(int i = messages.size()-1; i >= 0; --i) {
 				DirectMessage dm = messages.get(i);
 				long userID = dm.getSenderId();
-				if(ownID == dm.getSenderId() || DatabaseService.isMessageInDatabase(dm))
+				if(DatabaseService.isMessageInDatabase(dm))
 					//Message was handled already and no further action is required for this message.
 					continue;
+				if(ownID == dm.getSenderId()) {
+					//No need to handle the Server-Messages
+					DatabaseService.insertMessage(dm, am);
+					continue;
+				}
 				else {
 					DatabaseService.insertMessage(dm, am);
 					//The message is new. Get Player State.
@@ -100,11 +105,14 @@ public class OnlineThread implements Runnable {
 					InputHandler handler = new InputHandler(am, player);
 					//send answer to UserID and process Input
 					twitter.sendDirectMessage(userID, handler.processInput(dm.getText()));
-					
+
+					//TODO: Test
+					System.out.println("Antwort gesendet");
+					System.out.println(player.getItems());
+
 					DatabaseService.saveGame(userID, player, am);
 
 				}
-				
 			}
 			try {
 				//set sleep time to at least a minute (60 * 1000)

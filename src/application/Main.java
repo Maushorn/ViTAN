@@ -20,10 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import service.DatabaseService;
 import textadventure.AdventureMap;
-import textadventure.Item;
-import textadventure.Room;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -39,7 +36,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-
+//			TODO: uncomment this if you want to delete all inventories
+//			DatabaseService.resetAllInventories();
 			adventures = new ArrayList<>();
 			adventureNames = new ArrayList<>();			
 			loadAdventures();

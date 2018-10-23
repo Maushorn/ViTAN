@@ -257,6 +257,54 @@ public class DatabaseService {
 		}
 		return inventory;
 	}
+
+	public static void resetInventory(long userId, AdventureMap am){
+
+		Connection conn = null;
+		Statement stmt = null;
+		HashSet<Item> inventory = new HashSet<>();
+		try {
+			conn = DriverManager.getConnection(connString);
+			stmt = conn.createStatement();
+			String delete = "DELETE FROM Inventory WHERE UserId=" + userId + " AND Adventure='" + am.getName() + "'";
+			stmt.executeUpdate(delete);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(stmt!=null)
+					stmt.close();
+				if(conn!=null)
+					conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void resetAllInventories() {
+
+		Connection conn = null;
+		Statement stmt = null;
+		HashSet<Item> inventory = new HashSet<>();
+		try {
+			conn = DriverManager.getConnection(connString);
+			stmt = conn.createStatement();
+			String delete = "DELETE FROM Inventory";
+			stmt.executeUpdate(delete);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	public static void saveGame(long userID, Player player, AdventureMap am) {
 		Connection conn = null;

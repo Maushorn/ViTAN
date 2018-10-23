@@ -56,7 +56,8 @@ public class InputHandler {
 						if (i.getName().equalsIgnoreCase(inputArray[1]))
 							reactionMessage = i.getDescription();
 				}
-				if (!player.getPosition().getInteractiveObjects().isEmpty()) {
+				if (reactionMessage.equalsIgnoreCase(ReactionMessage.ITEM_MISSING) &&
+						!player.getPosition().getInteractiveObjects().isEmpty()) {
 					for (InteractiveObject iObj : player.getPosition().getInteractiveObjects())
 						if (iObj.getName().equalsIgnoreCase(inputArray[1]))
 							reactionMessage = iObj.getDescription();

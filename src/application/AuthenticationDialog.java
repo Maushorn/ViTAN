@@ -4,17 +4,17 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.nio.file.Paths;
 
 public class AuthenticationDialog extends Dialog {
 
-    public static final int LABEL_WIDTH = 160;
+    private static final int LABEL_WIDTH = 160;
+    private static final String INVALID_AUTHENTICATION = "Keine g\u00FCltigen Authentifizierungsdaten vorhanden.";
 
     public AuthenticationDialog(){
 
+        this.setTitle("Authentifizierung");
         HBox consumerKeyHBox = new HBox();
         HBox consumerSecretHBox = new HBox();
         HBox accessTokenHBox = new HBox();
@@ -30,10 +30,28 @@ public class AuthenticationDialog extends Dialog {
         Label accessTokenSecretLabel = new Label("Access Token Secret:");
         accessTokenSecretLabel.setPrefWidth(LABEL_WIDTH);
 
+        AuthenticationInfo info = loadAuthenticationInfo();
+
         TextField consumerKeyTxt = new TextField();
         TextField consumerSecretTxt = new TextField();
         TextField accessTokenTxt = new TextField();
         TextField accessTokenSecretTxt = new TextField();
+        if(info != null){
+            consumerKeyTxt.setText(info.getCONSUMER_KEY());
+            consumerSecretTxt.setText(info.getCONSUMER_SECRET());
+            accessTokenTxt.setText(info.getACCESS_TOKEN());
+            accessTokenSecretTxt.setText(info.getACCESS_TOKEN_SECRET());
+        }else{
+            consumerKeyTxt.setPromptText(INVALID_AUTHENTICATION);
+            consumerSecretTxt.setPromptText(INVALID_AUTHENTICATION);
+            accessTokenTxt.setPromptText(INVALID_AUTHENTICATION);
+            accessTokenSecretTxt.setPromptText(INVALID_AUTHENTICATION);
+        }
+
+        consumerKeyTxt.setPrefWidth(500);
+        consumerSecretTxt.setPrefWidth(500);
+        accessTokenTxt.setPrefWidth(500);
+        accessTokenSecretTxt.setPrefWidth(500);
 
         consumerKeyHBox.getChildren().addAll(consumerKeyLabel, consumerKeyTxt);
         consumerSecretHBox.getChildren().addAll(consumerSecretLabel, consumerSecretTxt);
@@ -71,7 +89,26 @@ public class AuthenticationDialog extends Dialog {
         this.setOnCloseRequest(e -> {
 
         });
+        this.getDialogPane().setPrefWidth(700);
         this.getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
+    }
+
+    private AuthenticationInfo loadAuthenticationInfo() {
+        FileInputStream fis;
+        ObjectInputStream ois;
+        AuthenticationInfo info = null;
+        try {
+            fis = new FileInputStream(".\\ConfigData.ser");
+            ois = new ObjectInputStream(fis);
+            info = (AuthenticationInfo)ois.readObject();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return info;
     }
 
 }
