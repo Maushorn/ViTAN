@@ -45,11 +45,27 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 		BUTTON_SIZE = 80;
 	}
 
+    TextField txtItemName;
+	TextArea txtItemDescription;
+    TextField txtIObjectName;
+    TextArea txtIObjectDescription;
+    TextField txtObjectKeyName;
+    TextField txtRewardName;
+    TextArea txtRewardDescription;
+
 	public EditAdventureDialog(AdventureMap map, ArrayList<AdventureMap> adventures) {
 
 		selectedRoom = map.getStart();
 		txtRoomName = new TextField();
 		txtRoomDescription = new TextArea();
+
+        txtItemName = new TextField();
+        txtItemDescription = new TextArea();
+        txtIObjectName = new TextField();
+        txtIObjectDescription = new TextArea();
+        txtObjectKeyName = new TextField();
+        txtRewardName = new TextField();
+        txtRewardDescription = new TextArea();
 
 		// map
 		VBox vBoxLeft = new VBox(BUTTON_SPACING);
@@ -94,7 +110,6 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 		});
 		// EditItems
 		cBoxItems = new ComboBox<>();
-		TextField txtItemName = new TextField();
 
 		// txtItemName.textProperty().addListener(new ChangeListener<String>() {
 		// @Override
@@ -106,7 +121,6 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 		// cBoxItems.setItems(FXCollections.observableArrayList(selectedRoom.getItemNames()));
 		// }
 		// });
-		TextArea txtItemDescription = new TextArea();
 		// txtItemDescription.textProperty().addListener(new ChangeListener<String>() {
 		// @Override
 		// public void changed(ObservableValue<? extends String> observable, String
@@ -114,7 +128,7 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 		// // TODO Auto-generated method stub
 		// }
 		// });
-		Button btnApplyItem = new Button("Änderungen übernehmen");
+		Button btnApplyItem = new Button("Übernehmen");
 		btnApplyItem.setOnAction(e -> {
 			// TODO: implement error message when no existing item is selected
 			selectedItem.setName(txtItemName.getText());
@@ -122,7 +136,7 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 			cBoxItems.setItems(FXCollections.observableArrayList(selectedRoom.getItemNames()));
 
 		});
-		Button btnAddNewItem = new Button("Item hinzufügen");
+		Button btnAddNewItem = new Button("Hinzufügen");
 		btnAddNewItem.setOnAction(e -> {
 			selectedItem = new Item(txtItemName.getText(), txtItemDescription.getText());
 			selectedRoom.getItems().add(selectedItem);
@@ -148,14 +162,9 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 
 		// EditIObjects
 		cBoxIObjects = new ComboBox<>();
-		TextField txtIObjectName = new TextField();
 		// TODO: implement logic!
-		TextArea txtIObjectDescription = new TextArea();
-		TextField txtObjectKeyName = new TextField();
 		txtObjectKeyName.setPromptText("Name des Schlüssels");
-		TextField txtRewardName = new TextField();
 		txtRewardName.setPromptText("Name der Belohnung");
-		TextArea txtRewardDescription = new TextArea();
 		txtRewardDescription.setPromptText("Beschreibung der Belohnung");
 		Button btnApplyIObject = new Button("Änderungen übernehmen");
 		btnApplyIObject.setOnAction(e -> {
@@ -257,6 +266,13 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 					// ed.showAndWait();
 					button.setText(room.getName());
 					tempMap.setRoomAt(columnsIndex, rowIndex, room);
+					txtItemName.setText("");
+					txtItemDescription.setText("");
+					txtIObjectName.setText("");
+					txtIObjectDescription.setText("");
+					txtObjectKeyName.setText("");
+					txtRewardName.setText("");
+					txtRewardDescription.setText("");
 					updateGUI();
 				});
 				if (!room.getName().equals("<leer>"))

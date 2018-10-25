@@ -42,24 +42,6 @@ public class OnlineThread implements Runnable {
 	@Override
 	public void run() {
 
-
-
-		//TODO get messages
-		
-		//for each message: validate if message is in database
-		
-			/*if message is not in database: get player status
-			 *  (this is a little complicated, because the AdventureMap Object has to be set according to the player state too)
-			*/
-		
-			//handle message
-		
-			//send response to player
-		
-			//put message into database
-		
-
-
 		while(!endLoop) {
 			DirectMessageList messages = null;
 			try {
@@ -69,15 +51,10 @@ public class OnlineThread implements Runnable {
 				messages = null;
 				ex.printStackTrace();
 			}
-			//remove old messages
-//			for(int i = 0; i <= messages.size(); ++i) {
-//				messages.get(i).getCreatedAt()
-//				if(messages.get(i).getCreatedAt().before(new Date().setDate(new Date().getDate()-1))) {
-//					
-//				}
-//			}
+
 			if(messages != null)
 			for(int i = messages.size()-1; i >= 0; --i) {
+				AdventureMap currentMap = new AdventureMap(am);
 				DirectMessage dm = messages.get(i);
 				long userID = dm.getSenderId();
 				if(DatabaseService.isMessageInDatabase(dm))
@@ -85,32 +62,34 @@ public class OnlineThread implements Runnable {
 					continue;
 				if(ownID == dm.getSenderId()) {
 					//No need to handle the Server-Messages
-					DatabaseService.insertMessage(dm, am);
+					DatabaseService.insertMessage(dm, currentMap);
 					continue;
 				}
 				else {
-					DatabaseService.insertMessage(dm, am);
+					DatabaseService.insertMessage(dm, currentMap);
 					//The message is new. Get Player State.
-					Player player = new Player(am);
-					if(!DatabaseService.isPlayerOnAdventure(userID, am)) {
-						DatabaseService.putPlayerOnAdventure(userID, am);
+					Player player = new Player(currentMap);
+					if(!DatabaseService.isPlayerOnAdventure(userID, currentMap)) {
+						DatabaseService.putPlayerOnAdventure(userID, currentMap);
 					}
 					//load Inventory
-					player.setItems(DatabaseService.loadInventory(userID, am));
+					player.setItems(DatabaseService.loadInventory(userID, currentMap));
 					//load Room
-					Room r = DatabaseService.loadRoom(userID, am);
+					Room r = DatabaseService.loadRoom(userID, currentMap);
 					if(r != null)
-						player.setPosition(DatabaseService.loadRoom(userID, am));
+						player.setPosition(r);
 					
-					InputHandler handler = new InputHandler(am, player);
+					InputHandler handler = new InputHandler(currentMap, player);
 					//send answer to UserID and process Input
 					twitter.sendDirectMessage(userID, handler.processInput(dm.getText()));
 
 					//TODO: Test
 					System.out.println("Antwort gesendet");
+					System.out.println("UserID: " + userID);
 					System.out.println(player.getItems());
 
-					DatabaseService.saveGame(userID, player, am);
+
+					DatabaseService.saveGame(userID, player, currentMap);
 
 				}
 			}

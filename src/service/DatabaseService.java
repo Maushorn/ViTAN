@@ -240,6 +240,11 @@ public class DatabaseService {
 					if(item.getName().equalsIgnoreCase(result.getString("Item"))) {
 						//TODO: remove Item from AdventureMap
 						inventory.add(item);
+						for(Room room : am.getAllRooms()){
+							if(room.getItems().contains(item))
+								room.getItems().remove(item);
+						}
+
 					}
 				}
 			}
@@ -267,6 +272,30 @@ public class DatabaseService {
 			conn = DriverManager.getConnection(connString);
 			stmt = conn.createStatement();
 			String delete = "DELETE FROM Inventory WHERE UserId=" + userId + " AND Adventure='" + am.getName() + "'";
+			stmt.executeUpdate(delete);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(stmt!=null)
+					stmt.close();
+				if(conn!=null)
+					conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	//TODO: finish
+	public static void resetLocation(long userId, AdventureMap am){
+		Connection conn = null;
+		Statement stmt = null;
+		HashSet<Item> inventory = new HashSet<>();
+		try {
+			conn = DriverManager.getConnection(connString);
+			stmt = conn.createStatement();
+			String delete = "DELETE FROM Location WHERE UserId=" + userId + " AND Adventure='" + am.getName() + "'";
 			stmt.executeUpdate(delete);
 		} catch (SQLException e) {
 			e.printStackTrace();

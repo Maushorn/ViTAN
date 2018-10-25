@@ -26,6 +26,7 @@ public class InputHandler {
 				reactionMessage = player.moveDown();
 			else if (inputArray[1].equalsIgnoreCase("left") || inputArray[1].equalsIgnoreCase("west"))
 				reactionMessage = player.moveLeft();
+			else reactionMessage = ReactionMessage.INVALID_MOVE;
 		} // use
 		else if (inputArray[0].equalsIgnoreCase("use") && inputArray.length >= 3) {
 			if (inputArray[2].equalsIgnoreCase("with") || inputArray[2].equalsIgnoreCase("and")) {
@@ -36,7 +37,7 @@ public class InputHandler {
 						InteractiveObject iObj = player.getSpecificInteractiveObject(inputArray[3]);
 						Item reward = iObj.getReward();
 						player.getItems().add(reward);
-						reactionMessage += "Du erhältst " + reward.getName();
+						reactionMessage += " Du erhältst " + reward.getName();
 					}
 				}
 				else {

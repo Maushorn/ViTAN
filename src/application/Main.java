@@ -20,6 +20,8 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import service.DatabaseService;
+import service.TwitterService;
 import textadventure.AdventureMap;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
@@ -36,8 +38,10 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+
 //			TODO: uncomment this if you want to delete all inventories
 //			DatabaseService.resetAllInventories();
+
 			adventures = new ArrayList<>();
 			adventureNames = new ArrayList<>();			
 			loadAdventures();
@@ -49,10 +53,19 @@ public class Main extends Application {
 			Menu edit = new Menu("_Edit");
 			MenuItem authMI = new MenuItem("Authentifizierung bearbeiten...");
 			edit.getItems().addAll(authMI);
-			menuBar.getMenus().addAll(edit);
+			Menu info  = new Menu("_Info");
+			MenuItem playerInfoMI = new MenuItem("Spielerdaten...");
+			info.getItems().addAll(playerInfoMI);
+			menuBar.getMenus().addAll(edit, info);
+
 			authMI.setOnAction(e -> {
 				AuthenticationDialog ad = new AuthenticationDialog();
 				ad.showAndWait();
+			});
+
+			playerInfoMI.setOnAction(e -> {
+				PlayerInfoDialog pid = new PlayerInfoDialog();
+				pid.showAndWait();
 			});
 
 			VBox root = new VBox(10);
@@ -131,7 +144,7 @@ public class Main extends Application {
 	}
 
 	private void updateAdventureList() {
-		ArrayList<String> adventureNames = new ArrayList<>();
+		adventureNames = new ArrayList<>();
 		for (AdventureMap am : adventures)
 			adventureNames.add(am.getName());
 		adventureNameList = FXCollections.observableArrayList(adventureNames);
