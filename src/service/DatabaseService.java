@@ -6,8 +6,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import metainformation.ItemInfo;
+import metainformation.PositionInfo;
 import textadventure.AdventureMap;
 import textadventure.Item;
 import textadventure.Player;
@@ -41,7 +47,10 @@ public class DatabaseService {
 			}
 		}	
 	}
-	
+
+	/**Initializes all tables.
+	 *
+	 */
 	public static void createTables() {
 		Connection conn = null;
 		Statement stmt = null;
@@ -84,8 +93,11 @@ public class DatabaseService {
 			}
 		}	
 	}
-	
-	public static void dropTables() {
+
+	/**Drops all tables.
+	 *
+	 */
+	public static void dropAllTables() {
 		Connection conn = null;
 		Statement stmt = null;
 		try {
@@ -117,7 +129,12 @@ public class DatabaseService {
 			}
 		}	
 	}
-	
+
+	/**Checks if a specific MessageID is already in the DataBase.
+	 *
+	 * @param dm
+	 * @return
+	 */
 	public static Boolean isMessageInDatabase(DirectMessage dm) {
 		Connection conn = null;
 		Statement stmt = null;
@@ -145,7 +162,12 @@ public class DatabaseService {
 		}
 		return false;
 	}
-	
+
+	/**Adds message to database.
+	 *
+	 * @param dm
+	 * @param am
+	 */
 	public static void insertMessage(DirectMessage dm, AdventureMap am) {
 		Connection conn = null;
 		PreparedStatement prepStmt = null;
@@ -172,7 +194,13 @@ public class DatabaseService {
 			}
 		}
 	}
-	
+
+	/**Checks if a player has already played this Adventure.
+	 *
+	 * @param userID
+	 * @param am
+	 * @return
+	 */
 	public static Boolean isPlayerOnAdventure(long userID, AdventureMap am) {
 		Connection conn = null;
 		Statement stmt = null;
@@ -199,7 +227,12 @@ public class DatabaseService {
 		}
 		return false;
 	}
-	
+
+	/**Adds new player to a Adventure.
+	 *
+	 * @param userID
+	 * @param am
+	 */
 	public static void putPlayerOnAdventure(long userID, AdventureMap am) {
 		Connection conn = null;
 		PreparedStatement prepStmt = null;
@@ -225,7 +258,13 @@ public class DatabaseService {
 			}
 		}
 	}
-	
+
+	/**Loads the items a player has collected in a specific adventure.
+	 *
+	 * @param userId
+	 * @param am
+	 * @return
+	 */
 	public static HashSet<Item> loadInventory(long userId, AdventureMap am) {
 		Connection conn = null;
 		Statement stmt = null;
@@ -263,6 +302,11 @@ public class DatabaseService {
 		return inventory;
 	}
 
+	/**Removes all items from a players inventory for a specific adventure.
+	 *
+	 * @param userId
+	 * @param am
+	 */
 	public static void resetInventory(long userId, AdventureMap am){
 
 		Connection conn = null;
@@ -311,8 +355,10 @@ public class DatabaseService {
 		}
 	}
 
+	/**CAUTION: Removes all items from all inventories.
+	 *
+	 */
 	public static void resetAllInventories() {
-
 		Connection conn = null;
 		Statement stmt = null;
 		HashSet<Item> inventory = new HashSet<>();
@@ -334,7 +380,8 @@ public class DatabaseService {
 			}
 		}
 	}
-	
+
+
 	public static void saveGame(long userID, Player player, AdventureMap am) {
 		Connection conn = null;
 		Statement stmt = null;
@@ -405,10 +452,62 @@ public class DatabaseService {
 		}
 		return null;
 	}
-	
+
+	public static ObservableList<PositionInfo> getPositionData(){
+		Connection conn = null;
+		Statement stmt = null;
+		ObservableList<PositionInfo> data = null;
+		try{
+			conn = DriverManager.getConnection(connString);
+			stmt = conn.createStatement();
+
+			String getLocationData = "SELECT * FROM Location";
+			ResultSet result = stmt.executeQuery(getLocationData);
+			List<PositionInfo> locationList = new ArrayList<>();
+			while(result.next()){
+				PositionInfo tempPositionInfo = new PositionInfo();
+				tempPositionInfo.setUserId(result.getLong("UserID"));
+				tempPositionInfo.setLocation(result.getString("Room"));
+				tempPositionInfo.setAdventure(result.getString("Adventure"));
+				locationList.add(tempPositionInfo);
+			}
+			data = FXCollections.observableList(locationList);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return data;
+	}
+
+	public static ObservableList<ItemInfo> getItemData() {
+		Connection conn = null;
+		Statement stmt = null;
+		ObservableList<ItemInfo> data = null;
+		try{
+			conn = DriverManager.getConnection(connString);
+			stmt = conn.createStatement();
+
+			String getItemData = "SELECT * FROM Inventory";
+			ResultSet result = stmt.executeQuery(getItemData);
+			List<ItemInfo> inventoryList = new ArrayList<>();
+			while(result.next()){
+				ItemInfo tempItemInfo = new ItemInfo();
+				tempItemInfo.setUserId(result.getLong("UserID"));
+				tempItemInfo.setAdventure(result.getString("Adventure"));
+				tempItemInfo.setItem(result.getString("Item"));
+				inventoryList.add(tempItemInfo);
+			}
+			data = FXCollections.observableList(inventoryList);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return data;
+	}
+
 	public static MetaInformation getMetaInformation() {
 		//TODO: Implement!!!
 		return null;
 	}
-	
+
+
 }
