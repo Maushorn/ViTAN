@@ -19,7 +19,7 @@ public class OnlineThread implements Runnable {
 	private long ownID;
 	TwitterService twitter;
 	
-	public OnlineThread(AdventureMap am) {
+	public OnlineThread(AdventureMap am) throws AuthenticationException{
 		super();
 		this.am = am;
 		FileInputStream fis;
@@ -32,8 +32,12 @@ public class OnlineThread implements Runnable {
 
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
+			throw new AuthenticationException("Authentication data could not be loaded." +
+					"Please make sure the Authentication tokens are set and correct and save them.");
 		}
-//TODO: what if info is null?
+		if(info == null)
+			throw new AuthenticationException("Authentication data could not be loaded." +
+					"Please make sure the Authentication tokens are set and correct and save them.");
 		twitter = new TwitterService(info);
         ownID = twitter.getOwnUserID();
 
@@ -41,7 +45,6 @@ public class OnlineThread implements Runnable {
 
 	@Override
 	public void run() {
-
 		while(!endLoop) {
 			DirectMessageList messages = null;
 			try {

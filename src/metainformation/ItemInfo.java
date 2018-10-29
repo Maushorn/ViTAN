@@ -3,6 +3,9 @@ package metainformation;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+/**This class is used to showeach players collected items in the PlayerInfoDialogs TableView.
+ *
+ */
 public class ItemInfo {
 
     SimpleLongProperty userId;

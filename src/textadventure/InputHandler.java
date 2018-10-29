@@ -2,8 +2,8 @@ package textadventure;
 
 public class InputHandler {
 
-	AdventureMap adventure;
-	Player player;
+	private AdventureMap adventure;
+	private Player player;
 
 	public InputHandler(AdventureMap adventure, Player player) {
 		super();
@@ -11,6 +11,11 @@ public class InputHandler {
 		this.player = player;
 	}
 
+	/**Translates the player input (String) into method calls.
+	 *
+	 * @param input
+	 * @return
+	 */
 	public String processInput(String input) {
 		String[] inputArray;
 		inputArray = input.split(" ");
@@ -76,13 +81,11 @@ public class InputHandler {
 			reactionMessage = player.getInventoryString();
 		else
 			reactionMessage = "no valid input";
-		// TODO Testing
-//		testOutput(input, inputArray);
 
 		return reactionMessage;
 	}
 
-	// TODO Testmethod
+	//Testmethod
 	public void testOutput(String input, String[] inputArray) {
 		System.out.print("Input: " + input + "\n" + "splitted Input: ");
 		for (String s : inputArray)

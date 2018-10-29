@@ -16,7 +16,6 @@ public class TwitterService {
 	private final String ACCESS_TOKEN;
 	private final String ACCESS_TOKEN_SECRET;
 	
-	//TODO: These keys shall be set through GUI
 	TwitterService(AuthenticationInfo info) {
 		CONSUMER_KEY = info.getCONSUMER_KEY();
 		CONSUMER_SECRET = info.getCONSUMER_SECRET();
@@ -178,7 +177,11 @@ public class TwitterService {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**Retrieves the authenticating acounts UserId to make sure, the application does react to it's own messages.
+	 *
+	 * @return
+	 */
 	public long getOwnUserID() {
 		ConfigurationBuilder configBuilder = new ConfigurationBuilder();
 		configBuilder.setOAuthConsumerKey(CONSUMER_KEY);

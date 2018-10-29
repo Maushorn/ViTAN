@@ -15,6 +15,7 @@ public class InputHandlerTest {
         Player player1 = new Player(map);
         InputHandler handler = new InputHandler(new AdventureMap("TestAdventure", new Room("Testraum")), player1);
         System.out.println("Test positive");
+
     }
 
 }

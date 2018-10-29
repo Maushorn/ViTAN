@@ -14,7 +14,7 @@ public class Player {
 		position = map.getStart();
 	}
 	
-	/**Should only be used for setting the start.
+	/**Should only be used for setting the starting position of the player at the beginning of a adventure.
 	 * 
 	 * @param room
 	 */
@@ -36,7 +36,12 @@ public class Player {
 				return i;
 		return null;
 	}
-	
+
+	/**Retreves a interactive object from the current location of the player.
+	 *
+	 * @param objectName
+	 * @return
+	 */
 	public InteractiveObject getSpecificInteractiveObject(String objectName) {
 		for(InteractiveObject iObj : position.getInteractiveObjects())
 			if(iObj.getName().equalsIgnoreCase(objectName))
@@ -47,48 +52,70 @@ public class Player {
 	public Room getPosition() {
 		return position;
 	}
-	
-	//TODO: map.getRoom returns null if the move exceeds the defined map.
+
+	/**Moves the player on the grid of an AdventureMap.
+	 *
+	 * @return
+	 */
 	public String moveUp() {
 		if((this.getCoord().getY() <= 0))
 			return ReactionMessage.INVALID_MOVE;
 		Room destination = map.getRoomAt(getCoord().getX(), getCoord().getY()-1);
 		if(destination!=null && !destination.getName().equals("<leer>")) {
 			position = destination;
-			return ReactionMessage.VALID_MOVE;
+			return "You enter: " + destination.getName();
 		}else return ReactionMessage.INVALID_MOVE;
 	}
-	
+
+	/**Moves the player on the grid of an AdventureMap.
+	 *
+	 * @return
+	 */
 	public String moveRight() {
 		if((this.getCoord().getX() >= map.getMap().size()))
 			return ReactionMessage.INVALID_MOVE;
 		Room destination = map.getRoomAt(getCoord().getX()+1, getCoord().getY());
 		if(destination!=null && !destination.getName().equals("<leer>")) {
 			position = destination;
-			return ReactionMessage.VALID_MOVE;
+			return "You enter: " + destination.getName();
 			}else return ReactionMessage.INVALID_MOVE;
 	}
-	
+
+	/**Moves the player on the grid of an AdventureMap.
+	 *
+	 * @return
+	 */
 	public String moveDown() {
 		if((this.getCoord().getY() >= map.getMap().get(0).size()))
 			return ReactionMessage.INVALID_MOVE;
 		Room destination = map.getRoomAt(getCoord().getX(), getCoord().getY()+1);
 		if(destination!=null && !destination.getName().equals("<leer>")) {
 			position = destination;
-			return ReactionMessage.VALID_MOVE;
+			return "You enter: " + destination.getName();
 			}else return ReactionMessage.INVALID_MOVE;
 	}
 
+	/**Moves the player on the grid of an AdventureMap.
+	 *
+	 * @return
+	 */
 	public String moveLeft() {
 		if(this.getCoord().getX() <= 0)
 			return ReactionMessage.INVALID_MOVE;
 		Room destination = map.getRoomAt(getCoord().getX()-1, getCoord().getY());
 		if(destination!=null && !destination.getName().equals("<leer>")) {
 			position = destination;
-			return ReactionMessage.VALID_MOVE;
+			return "You enter: " + destination.getName();
 			}else return ReactionMessage.INVALID_MOVE;
 	}
-	
+
+	/**If a player combines a InteractiveObject with it's correct key item,
+	 * this method adds a reward item to the players inventory.
+	 *
+	 * @param item
+	 * @param iObject
+	 * @return
+	 */
 	public String useItem(Item item, InteractiveObject iObject) {
 		if(item == null)
 			return ReactionMessage.ITEM_MISSING;
@@ -100,7 +127,11 @@ public class Player {
 			return ReactionMessage.SUCCESS;
 		else return ReactionMessage.ITEM_MISMATCH;
 	}
-	
+
+	/**Lists all Items in the players inventory in a String representation.
+	 *
+	 * @return
+	 */
 	public String getInventoryString() {
 		StringBuilder sb = new StringBuilder();
 		if(!items.isEmpty()){
@@ -114,7 +145,12 @@ public class Player {
 	public String inspect(Item item) {
 		return item.getDescription();
 	}
-	
+
+	/**Adds a item to the players inventory.
+	 *
+	 * @param itemName
+	 * @return
+	 */
 	public String takeSpecificItem(String itemName) {
 		if(!position.getItems().isEmpty())
 		for(Item i : position.getItems())

@@ -228,7 +228,7 @@ public class DatabaseService {
 		return false;
 	}
 
-	/**Adds new player to a Adventure.
+	/**Adds new player to a adventure.
 	 *
 	 * @param userID
 	 * @param am
@@ -277,7 +277,6 @@ public class DatabaseService {
 			while(result.next()) {
 				for(Item item : am.getAllItems()) {
 					if(item.getName().equalsIgnoreCase(result.getString("Item"))) {
-						//TODO: remove Item from AdventureMap
 						inventory.add(item);
 						for(Room room : am.getAllRooms()){
 							if(room.getItems().contains(item))
@@ -331,30 +330,6 @@ public class DatabaseService {
 		}
 	}
 
-	//TODO: finish
-	public static void resetLocation(long userId, AdventureMap am){
-		Connection conn = null;
-		Statement stmt = null;
-		HashSet<Item> inventory = new HashSet<>();
-		try {
-			conn = DriverManager.getConnection(connString);
-			stmt = conn.createStatement();
-			String delete = "DELETE FROM Location WHERE UserId=" + userId + " AND Adventure='" + am.getName() + "'";
-			stmt.executeUpdate(delete);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if(stmt!=null)
-					stmt.close();
-				if(conn!=null)
-					conn.close();
-			}catch(SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	/**CAUTION: Removes all items from all inventories.
 	 *
 	 */
@@ -381,7 +356,12 @@ public class DatabaseService {
 		}
 	}
 
-
+	/**Saves the current state (location and items) of a player for a specific AdventureMap.
+	 *
+	 * @param userID
+	 * @param player
+	 * @param am
+	 */
 	public static void saveGame(long userID, Player player, AdventureMap am) {
 		Connection conn = null;
 		Statement stmt = null;
@@ -402,7 +382,7 @@ public class DatabaseService {
 					prepStmt.executeUpdate();
 				}
 			}
-			//Update room
+			//Update location(Room)
 			String update = "UPDATE Location SET Room='" + player.getPosition().getName() + "' WHERE "
 					+ "UserID=" + userID + " AND Adventure='" + am.getName() + "'";
 			stmt.executeUpdate(update);
@@ -421,7 +401,13 @@ public class DatabaseService {
 		}
 		
 	}
-	
+
+	/**Loads the current position of a player in a specific AdventureMap.
+	 *
+	 * @param userID
+	 * @param am
+	 * @return
+	 */
 	public static Room loadRoom(long userID, AdventureMap am) {
 		Connection conn = null;
 		Statement stmt = null;
@@ -453,6 +439,10 @@ public class DatabaseService {
 		return null;
 	}
 
+	/**Retrieves data necessary for representation in PlayerInfoDialog's TableView.
+	 *
+	 * @return
+	 */
 	public static ObservableList<PositionInfo> getPositionData(){
 		Connection conn = null;
 		Statement stmt = null;
@@ -475,10 +465,53 @@ public class DatabaseService {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				if(stmt!=null)
+					stmt.close();
+				if(conn!=null)
+					conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return data;
 	}
 
+	/**Remove currently saved position of a player from Database.
+	 * (This practically means tha the player's position is set back to the starting room.)
+	 * @param positionInfo
+	 */
+	public static void deletePositionEntry(PositionInfo positionInfo){
+		Connection conn = null;
+		Statement stmt = null;
+		try{
+			conn = DriverManager.getConnection(connString);
+			stmt = conn.createStatement();
+			String deleteLocation ="DELETE FROM Location WHERE " +
+					"UserID=" + positionInfo.getUserId() + " AND " +
+					"Room='" + positionInfo.getLocation() + "' AND " +
+					"Adventure='" + positionInfo.getAdventure() + "'";
+
+			stmt.executeUpdate(deleteLocation);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(stmt!=null)
+					stmt.close();
+				if(conn!=null)
+					conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**Retrieves data necessary for representation in PlayerInfoDialogs TableView
+	 *
+	 * @return
+	 */
 	public static ObservableList<ItemInfo> getItemData() {
 		Connection conn = null;
 		Statement stmt = null;
@@ -500,14 +533,47 @@ public class DatabaseService {
 			data = FXCollections.observableList(inventoryList);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				if(stmt!=null)
+					stmt.close();
+				if(conn!=null)
+					conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return data;
 	}
 
-	public static MetaInformation getMetaInformation() {
-		//TODO: Implement!!!
-		return null;
-	}
+	/**Removes specific item from player's inventory.
+	 * (This practically means, the it is set back to the original position in the AdventureMap.)
+	 * @param itemInfo
+	 */
+	public static void deleteItemEntry(ItemInfo itemInfo){
+		Connection conn = null;
+		Statement stmt = null;
+		try{
+			conn = DriverManager.getConnection(connString);
+			stmt = conn.createStatement();
+			String deleteItem ="DELETE FROM Inventory WHERE " +
+					"UserID=" + itemInfo.getUserId() + " AND " +
+					"Item='" + itemInfo.getItem() + "' AND " +
+					"Adventure='" + itemInfo.getAdventure() + "'";
 
+			stmt.executeUpdate(deleteItem);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(stmt!=null)
+					stmt.close();
+				if(conn!=null)
+					conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 }
