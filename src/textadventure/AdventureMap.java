@@ -88,6 +88,12 @@ public class AdventureMap implements Serializable{
 		return name.get();
 	}
 
+	/**Places a Room at the specified location.
+	 *
+	 * @param x
+	 * @param y
+	 * @param room
+	 */
 	public void setRoomAt(int x, int y, Room room) {
 		if(this.getRoomAt(x, y).isStartRoom())
 			room.setStartRoom(true);
@@ -140,14 +146,23 @@ public class AdventureMap implements Serializable{
 		return null;
 		
 	}
-	
-	//TODO: What if Room does not exist?
+
+	/**Get room at specified position within the AdventureMap
+	 *
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public Room getRoomAt(int x, int y) {
 		if((map.size() <= x) || (map.get(x).size() <= y))
 			return null;
 		else return map.get(x).get(y);
 	}
-	
+
+	/**Get all rooms within the AdventureMap.
+	 *
+	 * @return
+	 */
 	public ArrayList<Room> getAllRooms() {
 		ArrayList<Room> roomList = new ArrayList<>();
 		for(int i = 0; i < map.size(); ++i)
@@ -170,6 +185,11 @@ public class AdventureMap implements Serializable{
 		return map;
 	}
 
+	/**Valuate wheter a Room is the starting point of the AdventureMap.
+	 *
+	 * @param r
+	 * @return
+	 */
 	private Boolean isStart(Room r) {
 		return r == start;
 	}
@@ -181,11 +201,17 @@ public class AdventureMap implements Serializable{
 	public void setStart(Room start) {
 		this.start = start;
 	}
-	
+
+	/**Copies information from SimpleXProperties to primitive types before serialization.
+	 *
+	 */
 	public void prepareForSerialization() {
 		serializableName = name.get();
 	}
-	
+
+	/**Copies information from primitive types to SimpleXProperties after deserialization.
+	 *
+	 */
 	public void initAfterDeserialization() {
 		name = new SimpleStringProperty(serializableName);
 	}

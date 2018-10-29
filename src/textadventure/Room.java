@@ -23,9 +23,6 @@ public class Room implements Serializable{
 		this.items = new HashSet<>();
 		this.interactiveObjects = new HashSet<>();
 		this.startRoom = false;
-		//TODO: Do I need these?
-//		this.xCoord = xCoord;
-//		this.yCoord = yCoord;
 	}
 	
 	public Room(String name, Boolean startRoom) {
@@ -147,6 +144,9 @@ public class Room implements Serializable{
 		this.name = name;
 	}
 
+	/**resets a Room back to its empty-state.
+	 *
+	 */
 	public void clear() {
 		name = "<leer>";
 		description = "<leer>";

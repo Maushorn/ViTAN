@@ -12,6 +12,10 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.VBox;
 import textadventure.Room;
 
+/**Through this dialog a Room can be edited.
+ * @deprecated It is no longer neccessary, because the Room-editing-functionality is implemented in the
+ * EditAdventureDialog-class.
+ */
 public class EditRoomDialog extends Dialog {
 
 	public EditRoomDialog(Room room) {

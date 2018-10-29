@@ -7,6 +7,9 @@ import javafx.scene.layout.VBox;
 import java.io.*;
 import java.nio.file.Paths;
 
+/**This dialog allows setting the authentification data for connecting with a account.
+ *
+ */
 public class AuthenticationDialog extends Dialog {
 
     private static final int LABEL_WIDTH = 160;
@@ -93,6 +96,10 @@ public class AuthenticationDialog extends Dialog {
         this.getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
     }
 
+    /**Loads the necessary information for acting in behalf of a Twitter-Account from a serialized file.
+     *
+     * @return
+     */
     private AuthenticationInfo loadAuthenticationInfo() {
         FileInputStream fis;
         ObjectInputStream ois;

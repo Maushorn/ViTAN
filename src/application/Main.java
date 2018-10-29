@@ -19,8 +19,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import service.AuthenticationException;
 import service.DatabaseService;
+import service.OnlineThread;
 import service.TwitterService;
 import textadventure.AdventureMap;
 import javafx.scene.Scene;
@@ -34,28 +37,28 @@ public class Main extends Application {
 	private ObservableList<String> adventureNameList;
 	private ArrayList<String> adventureNames;
 	private ListView<String> adventureList;
+	private Boolean online;
+	private Label lblOnline;
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 
-//			TODO: uncomment this if you want to delete all inventories
+//			uncomment this if you want to delete all inventories
 //			DatabaseService.resetAllInventories();
 
 			adventures = new ArrayList<>();
 			adventureNames = new ArrayList<>();			
 			loadAdventures();
 
-			// BorderPane root = new BorderPane();
-
-			//TODO: implement Menu
 			MenuBar menuBar = new MenuBar();
 			Menu edit = new Menu("_Edit");
 			MenuItem authMI = new MenuItem("Authentifizierung bearbeiten...");
 			edit.getItems().addAll(authMI);
 			Menu info  = new Menu("_Info");
 			MenuItem playerInfoMI = new MenuItem("Spielerdaten...");
-			info.getItems().addAll(playerInfoMI);
+			MenuItem helpMI = new MenuItem("Hilfe...");
+			info.getItems().addAll(playerInfoMI, helpMI);
 			menuBar.getMenus().addAll(edit, info);
 
 			authMI.setOnAction(e -> {
@@ -87,7 +90,6 @@ public class Main extends Application {
 				updateAdventureList();
 			});
 
-			// TODO: implement removing of serialized files
 			Button btnDeleteAdventure = new Button("Löschen");
 			btnDeleteAdventure.setOnAction(e -> {
 				adventures.remove(selectedAdventure);
@@ -102,12 +104,44 @@ public class Main extends Application {
 			});
 			btnStartTest.setDisable(true);
 
-			Button btnStartOnline = new Button("Online-Modus starten...");
+			Button btnStartOnline = new Button("Online-Modus starten");
+			online = false;
 			btnStartOnline.setOnAction(e -> {
-				OnlineDialog od = new OnlineDialog(selectedAdventure);
-				od.showAndWait();
+//				OnlineDialog od = new OnlineDialog(selectedAdventure);
+//				od.showAndWait();
+				OnlineThread onlineThread = null;
+				if(!online){
+
+					try {
+						onlineThread = new OnlineThread(selectedAdventure);
+
+					Thread thread = new Thread(onlineThread);
+					thread.setDaemon(true);
+					thread.start();
+					online = true;
+					lblOnline.setText("online");
+					lblOnline.setTextFill(Color.GREEN);
+					btnStartOnline.setText("Online-Modus beenden");
+					} catch (AuthenticationException e1) {
+						e1.printStackTrace();
+						Alert alert = new Alert(Alert.AlertType.ERROR, e1.getMessage());
+						alert.showAndWait();
+					}
+				}else{
+					if(onlineThread != null)
+						onlineThread.setEndLoop(true);
+					lblOnline.setText("offline");
+					lblOnline.setTextFill(Color.RED);
+					online = false;
+					btnStartOnline.setText("Online-Modus starten");
+				}
 			});
 			btnStartOnline.setDisable(true);
+			lblOnline = new Label("offline");
+			lblOnline.setPadding(new Insets(5));
+			lblOnline.setTextFill(Color.RED);
+			HBox hBoxOnline = new HBox(20);
+			hBoxOnline.getChildren().addAll(btnStartOnline, lblOnline);
 
 			adventureList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 				@Override
@@ -130,7 +164,12 @@ public class Main extends Application {
 			vbEditButtons.getChildren().addAll(btnNewAdventure, btnEditAdventure, btnDeleteAdventure);
 			HBox hbAdventure = new HBox(10);
 			hbAdventure.getChildren().addAll(adventureList, vbEditButtons);
-			root.getChildren().addAll(lbl1, hbAdventure, btnStartTest, btnStartOnline);
+			root.getChildren().addAll(
+					lbl1,
+					hbAdventure,
+					btnStartTest,
+					hBoxOnline
+			);
 			VBox parent = new VBox();
 			parent.getChildren().addAll(menuBar, root);
 			Scene scene = new Scene(parent, 400, 400);
@@ -143,6 +182,9 @@ public class Main extends Application {
 		}
 	}
 
+	/**This updates the list of AdventureMaps and should be called every time an AdventureMap is created or deleted.
+	 *
+	 */
 	private void updateAdventureList() {
 		adventureNames = new ArrayList<>();
 		for (AdventureMap am : adventures)
@@ -151,6 +193,9 @@ public class Main extends Application {
 		adventureList.setItems(adventureNameList);
 	}
 
+	/**Serializes all AdventureMaps and saves them.
+	 *
+	 */
 	public static void saveAdventures() {
 		ObjectOutputStream oos;
 		FileOutputStream fos;

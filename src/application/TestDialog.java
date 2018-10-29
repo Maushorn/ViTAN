@@ -9,6 +9,9 @@ import textadventure.AdventureMap;
 import textadventure.InputHandler;
 import textadventure.Player;
 
+/**This allows playing through an AdventureMap locally without saving.
+ *
+ */
 public class TestDialog extends Dialog {
 
 	private final int WIDTH = 400;

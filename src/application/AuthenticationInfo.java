@@ -2,6 +2,10 @@ package application;
 
 import java.io.Serializable;
 
+/**This class represents the information that is needed to act on behalf of a Twitter-Account
+ * and ist used to serialize the information.
+ *
+ */
 public class AuthenticationInfo implements Serializable {
 
     private final String CONSUMER_KEY;

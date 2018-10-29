@@ -3,6 +3,9 @@ package metainformation;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+/**This class is used to show each players current location in the PlayerInfoDialogs TableView.
+ *
+ */
 public class PositionInfo {
 
     SimpleLongProperty userId;
