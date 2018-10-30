@@ -22,6 +22,7 @@ public class PlayerInfoDialog extends Dialog {
 
         ObservableList<PositionInfo> positionData = DatabaseService.getPositionData();
         TableView<PositionInfo> locationTable = new TableView<>(positionData);
+        locationTable.setPrefHeight(300);
         TableColumn<PositionInfo, Long> userIdCol = new TableColumn<>("UserID");
         userIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
         TableColumn<PositionInfo, String> positionCol = new TableColumn<>("Position");
@@ -39,6 +40,7 @@ public class PlayerInfoDialog extends Dialog {
 
         ObservableList<ItemInfo> itemData = DatabaseService.getItemData();
         TableView<ItemInfo> itemTable = new TableView<>(itemData);
+        itemTable.setPrefHeight(300);
         TableColumn<ItemInfo, Long> userIdCol2 = new TableColumn<>("UserID");
         userIdCol2.setCellValueFactory((new PropertyValueFactory<>("userId")));
         TableColumn<ItemInfo, String> itemCol = new TableColumn<>("Item");
@@ -53,6 +55,7 @@ public class PlayerInfoDialog extends Dialog {
             DatabaseService.deleteItemEntry(itemInfo);
             itemData.remove(itemInfo);
         });
+
 
         VBox vBox = new VBox(10);
         vBox.getChildren().addAll(

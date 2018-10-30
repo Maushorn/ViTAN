@@ -39,6 +39,7 @@ public class Main extends Application {
 	private ListView<String> adventureList;
 	private Boolean online;
 	private Label lblOnline;
+	private OnlineThread onlineThread;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -46,7 +47,7 @@ public class Main extends Application {
 
 //			uncomment this if you want to delete all inventories
 //			DatabaseService.resetAllInventories();
-
+			onlineThread = null;
 			adventures = new ArrayList<>();
 			adventureNames = new ArrayList<>();			
 			loadAdventures();
@@ -109,7 +110,6 @@ public class Main extends Application {
 			btnStartOnline.setOnAction(e -> {
 //				OnlineDialog od = new OnlineDialog(selectedAdventure);
 //				od.showAndWait();
-				OnlineThread onlineThread = null;
 				if(!online){
 
 					try {

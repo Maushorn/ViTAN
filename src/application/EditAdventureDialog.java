@@ -16,6 +16,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.effect.ColorInput;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
+import javafx.scene.effect.Glow;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -42,6 +46,7 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 	private TextArea txtRoomDescription;
 	private ComboBox<String> cBoxItems;
 	private ComboBox<String> cBoxIObjects;
+    private Button selectedButton;
 
 	static {
 		BUTTON_SPACING = 10;
@@ -265,7 +270,6 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 					txtRoomDescription.setText(room.getDescription());
 					cBoxItems.setItems(FXCollections.observableArrayList(selectedRoom.getItemNames()));
 					cBoxIObjects.setItems(FXCollections.observableArrayList(selectedRoom.getIObjectNames()));
-
 					button.setText(room.getName());
 					tempMap.setRoomAt(columnsIndex, rowIndex, room);
 					txtItemName.setText("");
@@ -277,6 +281,10 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 					txtRewardDescription.setText("");
 					updateGUI();
 				});
+
+				if(room == selectedRoom)
+				    button.setEffect(new DropShadow(15., Color.BLUE));
+
 				if (!room.getName().equals("<leer>"))
 					button.setTextFill(Color.BLUE);
 				column.getChildren().add(button);
