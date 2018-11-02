@@ -244,7 +244,6 @@ public class EditAdventureDialog extends Dialog<ButtonType> {
 		this.setWidth(1300);
 		this.setHeight(800);
 		this.getDialogPane().setContent(hBox);
-
 		this.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
 
 	}

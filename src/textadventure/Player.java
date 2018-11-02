@@ -30,7 +30,12 @@ public class Player {
 	public void setItems(HashSet<Item> items) {
 		this.items = items;
 	}
-	
+
+	/**Returns an item identified by it's name.
+	 *
+	 * @param itemName
+	 * @return
+	 */
 	public Item getSpecificItem(String itemName) {
 		for(Item i : items)
 			if(i.getName().equalsIgnoreCase(itemName))
@@ -64,7 +69,7 @@ public class Player {
 		Room destination = map.getRoomAt(getCoord().getX(), getCoord().getY()-1);
 		if(destination!=null && !destination.getName().equals("<leer>")) {
 			position = destination;
-			return "You enter: " + destination.getName();
+			return "Du betrittst: " + destination.getName();
 		}else return ReactionMessage.INVALID_MOVE;
 	}
 
@@ -78,7 +83,7 @@ public class Player {
 		Room destination = map.getRoomAt(getCoord().getX()+1, getCoord().getY());
 		if(destination!=null && !destination.getName().equals("<leer>")) {
 			position = destination;
-			return "You enter: " + destination.getName();
+			return "Du betrittst: " + destination.getName();
 			}else return ReactionMessage.INVALID_MOVE;
 	}
 
@@ -92,7 +97,7 @@ public class Player {
 		Room destination = map.getRoomAt(getCoord().getX(), getCoord().getY()+1);
 		if(destination!=null && !destination.getName().equals("<leer>")) {
 			position = destination;
-			return "You enter: " + destination.getName();
+			return "Du betrittst: " + destination.getName();
 			}else return ReactionMessage.INVALID_MOVE;
 	}
 
@@ -106,7 +111,7 @@ public class Player {
 		Room destination = map.getRoomAt(getCoord().getX()-1, getCoord().getY());
 		if(destination!=null && !destination.getName().equals("<leer>")) {
 			position = destination;
-			return "You enter: " + destination.getName();
+			return "Du betrittst: " + destination.getName();
 			}else return ReactionMessage.INVALID_MOVE;
 	}
 
