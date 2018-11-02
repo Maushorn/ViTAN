@@ -19,6 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import service.AuthenticationException;
@@ -44,7 +45,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-
+			primaryStage.getIcons().add(new Image(Paths.get(".\\Resources\\Icon.png").toUri().toString()));
 //			uncomment this if you want to delete all inventories
 //			DatabaseService.resetAllInventories();
 			onlineThread = null;

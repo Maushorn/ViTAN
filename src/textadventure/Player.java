@@ -7,7 +7,8 @@ public class Player {
 	private AdventureMap map;
 	private Room position;
 	private HashSet<Item> items;
-		
+
+
 	public Player(AdventureMap map) {
 		this.map = map;
 		items = new HashSet<>();
