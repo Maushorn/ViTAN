@@ -1,6 +1,7 @@
 package service;
 
 import application.AuthenticationInfo;
+import javafx.scene.control.Alert;
 import textadventure.AdventureMap;
 import textadventure.InputHandler;
 import textadventure.Player;
@@ -16,7 +17,7 @@ public class OnlineThread implements Runnable {
 
 	private Boolean endLoop = false;
 	private AdventureMap am;
-	private long ownID;
+	private long ownID = 0;
 	TwitterService twitter;
 	
 	public OnlineThread(AdventureMap am) throws AuthenticationException{
@@ -40,12 +41,23 @@ public class OnlineThread implements Runnable {
 					"Please make sure the Authentication tokens are set and correct and save them.");
 		twitter = new TwitterService(info);
         ownID = twitter.getOwnUserID();
+        if(ownID == 0){
+			Alert authAlert = new Alert(Alert.AlertType.ERROR, "Verbindung fehlgeschlagen." +
+					"Bitte Prüfen Sie ob die Authentifizierungsdaten korrekt sind.");
+			authAlert.showAndWait();
+		}
 
+	}
+
+	public long getOwnID() {
+		return ownID;
 	}
 
 	@Override
 	public void run() {
 		while(!endLoop) {
+			if(ownID == 0)
+				return;
 			DirectMessageList messages = null;
 			try {
 				messages = twitter.getDirectMessages();

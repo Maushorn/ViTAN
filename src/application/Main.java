@@ -115,6 +115,8 @@ public class Main extends Application {
 
 					try {
 						onlineThread = new OnlineThread(selectedAdventure);
+						if(onlineThread.getOwnID() == 0)
+						    return;
 
 					Thread thread = new Thread(onlineThread);
 					thread.setDaemon(true);
