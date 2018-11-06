@@ -60,7 +60,7 @@ public class Main extends Application {
 			Menu info  = new Menu("_Info");
 			MenuItem playerInfoMI = new MenuItem("Spielerdaten...");
 			MenuItem helpMI = new MenuItem("Hilfe...");
-			info.getItems().addAll(playerInfoMI, helpMI);
+			info.getItems().add(playerInfoMI);
 			menuBar.getMenus().addAll(edit, info);
 
 			authMI.setOnAction(e -> {
