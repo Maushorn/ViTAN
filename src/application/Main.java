@@ -204,6 +204,7 @@ public class Main extends Application {
 		FileOutputStream fos;
 		for (AdventureMap am : adventures) {
 			try {
+				//TODO: Create directory 'Adventures' if there is none
 				fos = new FileOutputStream(".\\Adventures\\" + am.getName() + ".ser");
 				oos = new ObjectOutputStream(fos);
 				am.prepareForSerialization();
